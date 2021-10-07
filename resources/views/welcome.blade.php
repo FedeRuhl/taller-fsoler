@@ -54,7 +54,7 @@
                             </div>
 
                             <div class="ml-12">
-                                
+                                Commit hecho por fd
                             </div>
                         </div>
 
