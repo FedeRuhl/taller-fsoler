@@ -15,6 +15,10 @@ class CreateGenericsTable extends Migration
     {
         Schema::create('generics', function (Blueprint $table) {
             $table->id();
+            $table->integer('SIByS_code')->unique();
+            $table->char('name');
+            $table->boolean('is_disposable');
+            $table->char('presentation');
             $table->timestamps();
         });
     }

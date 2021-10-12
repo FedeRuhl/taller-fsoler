@@ -15,6 +15,7 @@ class CreateDepotsTable extends Migration
     {
         Schema::create('depots', function (Blueprint $table) {
             $table->id();
+            $table->char('name');
             $table->timestamps();
         });
     }
