@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDepotProductTable extends Migration
+class CreateUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,24 +13,28 @@ class CreateDepotProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('depot_product', function (Blueprint $table) {
+        // health staff
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('depot_id')
+            $table->foreignId('person_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->foreignId('product_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->string('docket')->index(); //legajo
 
-            $table->integer('stock');
+            $table->string('username');
 
-            $table->date('expiration_date');
+            $table->string('email')->unique();
 
-            $table->string('lote_code');
+            $table->timestamp('email_verified_at')->nullable();
+
+            $table->string('password');
+
+            $table->string('class');
+
+            $table->rememberToken();
 
             $table->timestamps();
         });
@@ -43,6 +47,6 @@ class CreateDepotProductTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('depot_product');
+        Schema::dropIfExists('users');
     }
 }

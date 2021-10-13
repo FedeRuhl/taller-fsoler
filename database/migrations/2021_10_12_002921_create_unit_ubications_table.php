@@ -15,9 +15,9 @@ class CreateUnitUbicationsTable extends Migration
     {
         Schema::create('unit_ubications', function (Blueprint $table) {
             $table->id();
-            $table->char('city');
-            $table->char('province');
-            $table->char('zip_code');
+            $table->string('city');
+            $table->string('province');
+            $table->string('zip_code');
             $table->timestamps();
         });
     }

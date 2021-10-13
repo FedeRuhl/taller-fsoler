@@ -1,10 +1,12 @@
 <?php
 
+use App\Models\Supplier;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDepotProductTable extends Migration
+class CreateOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,24 +15,24 @@ class CreateDepotProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('depot_product', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('depot_id')
+            $table->foreignIdFor(User::class) // personal de sanidad
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            
+            $table->foreignIdFor(Supplier::class)
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->foreignId('product_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->integer('number')->index();
 
-            $table->integer('stock');
+            $table->string('type');
 
-            $table->date('expiration_date');
-
-            $table->string('lote_code');
+            $table->dateTime('date');
 
             $table->timestamps();
         });
@@ -43,6 +45,6 @@ class CreateDepotProductTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('depot_product');
+        Schema::dropIfExists('orders');
     }
 }

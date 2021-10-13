@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->char('lab');
+            $table->string('lab');
             $table->timestamps();
         });
     }

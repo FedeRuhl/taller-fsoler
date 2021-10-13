@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGenericsTable extends Migration
+class CreateSupplierAddressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateGenericsTable extends Migration
      */
     public function up()
     {
-        Schema::create('generics', function (Blueprint $table) {
+        Schema::create('supplier_addresses', function (Blueprint $table) {
             $table->id();
-            $table->integer('SIByS_code')->unique();
-            $table->string('name');
-            $table->boolean('is_disposable');
-            $table->string('presentation');
+            $table->string('zip_code');
+            $table->string('street');
+            $table->smallInteger('number');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateGenericsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('generics');
+        Schema::dropIfExists('supplier_addresses');
     }
 }
