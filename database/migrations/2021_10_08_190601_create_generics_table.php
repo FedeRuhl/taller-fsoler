@@ -17,8 +17,8 @@ class CreateGenericsTable extends Migration
             $table->id();
             $table->integer('SIByS_code')->unique();
             $table->string('name');
-            $table->boolean('is_disposable');
-            $table->string('presentation');
+            $table->boolean('is_disposable')->nullable(); // descartable
+            $table->string('presentation')->nullable();
             $table->timestamps();
         });
     }

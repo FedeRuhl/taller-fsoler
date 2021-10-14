@@ -1,12 +1,10 @@
 <?php
 
-use App\Models\Supplier;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersTable extends Migration
+class CreateRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +13,7 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('requests', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('owner_id'); //personal de sanidad
@@ -24,17 +22,15 @@ class CreateOrdersTable extends Migration
                 ->on('users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            
-            $table->foreignId('supplier_id')
+
+            $table->foreignId('hospitalization_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('number')->index();
+            $table->date('date');
 
-            $table->string('type')->nullable();
-
-            $table->dateTime('date')->nullable();
+            $table->boolean('is_authorized')->default(false);
 
             $table->timestamps();
         });
@@ -47,6 +43,6 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('requests');
     }
 }

@@ -26,9 +26,9 @@ class CreatePatientsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('os_number')->index();
+            $table->integer('os_number')->index(); // número de obra social
 
-            $table->string('status');
+            $table->string('status')->nullable();
 
             $table->boolean('isMilitary');
 

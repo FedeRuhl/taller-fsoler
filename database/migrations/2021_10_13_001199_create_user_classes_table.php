@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductsTable extends Migration
+class CreateUserClassesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,8 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('user_classes', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('generic_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-            $table->string('lab');
-            
             $table->timestamps();
         });
     }
@@ -34,6 +26,6 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('user_classes');
     }
 }

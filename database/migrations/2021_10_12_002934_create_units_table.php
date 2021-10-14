@@ -21,6 +21,8 @@ class CreateUnitsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
+            $table->string('name');
+
             $table->timestamps();
         });
     }

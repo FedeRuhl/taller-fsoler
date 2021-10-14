@@ -22,6 +22,11 @@ class CreateUsersTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
+            $table->foreignId('user_class_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
             $table->string('docket')->index(); //legajo
 
             $table->string('username');
@@ -31,8 +36,6 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
 
             $table->string('password');
-
-            $table->string('class');
 
             $table->rememberToken();
 

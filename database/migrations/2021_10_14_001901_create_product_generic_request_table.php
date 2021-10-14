@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductsTable extends Migration
+class CreateProductGenericRequestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,21 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('product_generic_request', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('generic_id')
+            $table->foreignId('generic_request_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->string('lab');
-            
+            $table->foreignId('product_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->integer('products_quantity');
+
             $table->timestamps();
         });
     }
@@ -34,6 +39,6 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('product_generic_request');
     }
 }

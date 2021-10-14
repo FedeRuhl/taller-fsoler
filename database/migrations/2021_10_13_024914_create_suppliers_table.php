@@ -13,6 +13,7 @@ class CreateSuppliersTable extends Migration
      */
     public function up()
     {
+        // Proveedores
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
             
