@@ -2,19 +2,18 @@
 
 namespace Database\Seeders;
 
+use App\Models\Person;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class PersonSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-        $this->call([
-            PersonSeeder::class
-        ]);
+        Person::factory()->count(50)->create();
     }
 }
