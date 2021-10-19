@@ -22,7 +22,19 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'generic_id' => $this->faker->numberBetween(1, 50),
+            'lab' => $this->faker->company(),
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Product $product) {
+            $product->depots()->attach($this->faker->numberBetween(1, 2), [
+                'stock' => $this->faker->randomNumber(3),
+                'expiration_date' => $this->faker->dateTimeBetween('+0 days', '+2 years'),
+                'lote_code' => $this->faker->bothify('###???')
+            ]);
+        });
     }
 }

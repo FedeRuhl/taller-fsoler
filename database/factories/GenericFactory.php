@@ -22,7 +22,10 @@ class GenericFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'SIByS_code' => $this->faker->unique()->randomNumber(4, true),
+            'name' => $this->faker->word(),
+            'is_disposable' => $this->faker->boolean(),
+            'presentation' => $this->faker->text(35)
         ];
     }
 }
