@@ -30,7 +30,7 @@ class CreatePatientsTable extends Migration
 
             $table->string('status')->nullable();
 
-            $table->boolean('isMilitary');
+            $table->boolean('is_military');
 
             $table->timestamps();
         });

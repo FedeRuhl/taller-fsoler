@@ -22,7 +22,12 @@ class PatientFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'person_id' => $this->faker->unique()->numberBetween(11, 30),
+            // 'unit_id' => $this->faker->numberBetween(1, 5),
+            'unit_id' => 1,
+            'os_number' => $this->faker->randomNumber(6, true),
+            // 'status' => '',
+            'is_military' => $this->faker->boolean(20)
         ];
     }
 }

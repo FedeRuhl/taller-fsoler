@@ -22,7 +22,9 @@ class UnitUbicationFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'city' => $this->faker->city(),
+            'province' => $this->faker->state(),
+            'zip_code' => $this->faker->postcode()
         ];
     }
 }

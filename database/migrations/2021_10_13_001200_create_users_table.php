@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->id();
 
             $table->foreignId('person_id')
+                ->unique()
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -27,7 +28,7 @@ class CreateUsersTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->string('docket')->index(); //legajo
+            $table->integer('docket')->index(); //legajo
 
             $table->string('username');
 

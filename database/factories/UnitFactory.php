@@ -22,7 +22,8 @@ class UnitFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'unit_ubication_id' => $this->faker->unique()->randomElement([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+            'name' => $this->faker->word()
         ];
     }
 }

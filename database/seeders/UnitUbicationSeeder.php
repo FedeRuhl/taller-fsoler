@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\UnitUbication;
 use Illuminate\Database\Seeder;
 
 class UnitUbicationSeeder extends Seeder
@@ -13,6 +14,6 @@ class UnitUbicationSeeder extends Seeder
      */
     public function run()
     {
-        //
+        UnitUbication::factory()->count(10)->create();
     }
 }

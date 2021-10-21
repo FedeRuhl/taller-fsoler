@@ -13,4 +13,8 @@ class Person extends Model
     public function getAgeAttribute() {
         return Carbon::parse($this->birth_date)->age;
     }
+
+    public function phones() {
+        return $this->hasMany(Phone::class);
+    }
 }

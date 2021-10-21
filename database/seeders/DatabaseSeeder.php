@@ -18,6 +18,12 @@ class DatabaseSeeder extends Seeder
             DepotSeeder::class,
             GenericSeeder::class,
             ProductSeeder::class,
+            UserClassSeeder::class,
+            UserSeeder::class,
+            ServiceSeeder::class,
+            UnitUbicationSeeder::class,
+            UnitSeeder::class,
+            PatientSeeder::class
         ]);
     }
 }

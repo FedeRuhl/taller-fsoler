@@ -15,6 +15,7 @@ class CreateUserClassesTable extends Migration
     {
         Schema::create('user_classes', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->timestamps();
         });
     }
