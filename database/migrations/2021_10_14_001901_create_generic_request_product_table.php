@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductGenericRequestTable extends Migration
+class CreateGenericRequestProductTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateProductGenericRequestTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_generic_request', function (Blueprint $table) {
+        Schema::create('generic_request_product', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('generic_request_id')

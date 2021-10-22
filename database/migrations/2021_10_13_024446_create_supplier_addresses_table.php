@@ -17,7 +17,7 @@ class CreateSupplierAddressesTable extends Migration
             $table->id();
             $table->string('zip_code');
             $table->string('street');
-            $table->smallInteger('number');
+            $table->integer('number');
             $table->timestamps();
         });
     }

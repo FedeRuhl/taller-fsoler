@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Hospitalization;
 use Illuminate\Database\Seeder;
 
 class HospitalizationSeeder extends Seeder
@@ -13,6 +14,6 @@ class HospitalizationSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Hospitalization::factory()->count(5)->create();
     }
 }

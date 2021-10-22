@@ -23,7 +23,11 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             UnitUbicationSeeder::class,
             UnitSeeder::class,
-            PatientSeeder::class
+            PatientSeeder::class,
+            SupplierAddressSeeder::class,
+            OrderSeeder::class,
+            HospitalizationSeeder::class,
+            RequestSeeder::class,
         ]);
     }
 }

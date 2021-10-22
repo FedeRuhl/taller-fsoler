@@ -22,7 +22,23 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'owner_id' => $this->faker->numberBetween(1, 10),
+            'supplier_id' => $this->faker->numberBetween(1, 10),
+            'number' => $this->faker->randomNumber(),
+            'type' => $this->faker->word(), // ???
+            'date' => $this->faker->dateTimeBetween('now', '+1 years')
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Order $order) {
+            $order->products()->attach(
+                $this->faker->numberBetween(1, 100),
+                [
+                    'product_quantity' => $this->faker->randomNumber(3)
+                ] 
+            );
+        });
     }
 }

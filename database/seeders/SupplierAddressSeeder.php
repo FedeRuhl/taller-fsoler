@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\SupplierAddress;
 use Illuminate\Database\Seeder;
 
-class SupplierSeeder extends Seeder
+class SupplierAddressSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +14,6 @@ class SupplierSeeder extends Seeder
      */
     public function run()
     {
-        //
+        SupplierAddress::factory()->count(10)->create();
     }
 }
