@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Exception;
 use App\Models\Depot;
 use Illuminate\Http\Request;
+use App\Http\Resources\DepotResource;
+use App\Http\Requests\Depot\StoreDepotRequest;
 
-class DepotController extends Controller
+class DepotController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -24,9 +26,22 @@ class DepotController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreDepotRequest $request)
     {
-        //
+        try
+        {
+            $depot = Depot::create($request->validated());
+
+            if ($depot)
+            {
+                return $this->sendResponse(new DepotResource($depot), 'Depot sucessfully created.');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -49,7 +64,7 @@ class DepotController extends Controller
      */
     public function update(Request $request, Depot $depot)
     {
-        //
+        // Rule::unique('users')->ignore($user->id)
     }
 
     /**
