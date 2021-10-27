@@ -2,6 +2,7 @@
 
 use App\Models\Supplier;
 use App\Models\User;
+use App\Models\OrderType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -30,9 +31,12 @@ class CreateOrdersTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('number')->index();
+            $table->foreignId('order_type_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
-            $table->string('type')->nullable();
+            $table->string('number');
 
             $table->dateTime('date')->nullable();
 

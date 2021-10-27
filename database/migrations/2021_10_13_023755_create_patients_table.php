@@ -26,7 +26,7 @@ class CreatePatientsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('os_number')->index(); // número de obra social
+            $table->string('os_number')->index(); // número de obra social
 
             $table->string('status')->nullable();
 

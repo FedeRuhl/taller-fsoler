@@ -24,8 +24,8 @@ class OrderFactory extends Factory
         return [
             'owner_id' => $this->faker->numberBetween(1, 10),
             'supplier_id' => $this->faker->numberBetween(1, 10),
-            'number' => $this->faker->randomNumber(),
-            'type' => $this->faker->word(), // ???
+            'order_type_id' => $this->faker->numberBetween(1, 4),
+            'number' => $this->faker->phoneNumber(),
             'date' => $this->faker->dateTimeBetween('now', '+1 years')
         ];
     }

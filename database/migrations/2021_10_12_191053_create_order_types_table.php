@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGenericsTable extends Migration
+class CreateOrderTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateGenericsTable extends Migration
      */
     public function up()
     {
-        Schema::create('generics', function (Blueprint $table) {
+        Schema::create('order_types', function (Blueprint $table) {
             $table->id();
-            $table->string('SIByS_code')->unique();
             $table->string('name');
-            $table->boolean('is_disposable')->nullable(); // descartable
-            $table->string('presentation')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ class CreateGenericsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('generics');
+        Schema::dropIfExists('order_types');
     }
 }
