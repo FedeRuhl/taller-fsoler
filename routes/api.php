@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\DepotController;
+use App\Http\Controllers\Api\GenericController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,5 +36,24 @@ Route::prefix('depots')
             ->name('update');
 
         Route::delete('/{depot_id}', [DepotController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+Route::prefix('generics')
+    ->name('generics.')
+    ->group(function() {
+        Route::get('/', [GenericController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [GenericController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{generic_id}', [GenericController::class, 'show'])
+            ->name('show');
+
+        Route::put('/{generic_id}', [GenericController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{generic_id}', [GenericController::class, 'destroy'])
             ->name('destroy');
     });

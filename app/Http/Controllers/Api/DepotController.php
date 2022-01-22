@@ -23,7 +23,7 @@ class DepotController extends ApiController
 
             if ($depots)
             {
-                return $this->sendResponse(DepotResource::collection($depots), 'Depot sucessfully listed.');
+                return $this->sendResponse(DepotResource::collection($depots), 'Depots sucessfully listed.');
             }
         }
         
@@ -102,6 +102,7 @@ class DepotController extends ApiController
             if ($depot)
             {
                 $depot->update($validated);
+                $depot->save();
                 return $this->sendResponse(new DepotResource($depot), 'Depot sucessfully updated.');
             }
             else
