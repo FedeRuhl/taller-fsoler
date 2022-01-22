@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use Exception;
-use App\Models\Depot;
-use Illuminate\Http\Request;
-use App\Http\Resources\DepotResource;
 use App\Http\Requests\Depot\StoreDepotRequest;
+use App\Http\Requests\Depot\UpdateDepotRequest;
+use App\Http\Resources\DepotResource;
+use App\Models\Depot;
+use Exception;
 
 class DepotController extends ApiController
 {
@@ -17,7 +17,20 @@ class DepotController extends ApiController
      */
     public function index()
     {
-        //
+        try
+        {
+            $depots = Depot::all();
+
+            if ($depots)
+            {
+                return $this->sendResponse(DepotResource::collection($depots), 'Depot sucessfully listed.');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -50,9 +63,26 @@ class DepotController extends ApiController
      * @param  \App\Models\Depot  $depot
      * @return \Illuminate\Http\Response
      */
-    public function show(Depot $depot)
+    public function show($depot_id)
     {
-        //
+        try
+        {
+            $depot = Depot::find($depot_id);
+
+            if ($depot)
+            {
+                return $this->sendResponse(new DepotResource($depot), 'Depot sucessfully found.');
+            }
+            else
+            {
+                return $this->sendError('Depot not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -62,9 +92,28 @@ class DepotController extends ApiController
      * @param  \App\Models\Depot  $depot
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Depot $depot)
+    public function update(UpdateDepotRequest $request, $depot_id)
     {
-        // Rule::unique('users')->ignore($user->id)
+        try
+        {
+            $validated = $request->safe()->except(['depot_id']);
+            $depot = Depot::find($depot_id);
+
+            if ($depot)
+            {
+                $depot->update($validated);
+                return $this->sendResponse(new DepotResource($depot), 'Depot sucessfully updated.');
+            }
+            else
+            {
+                return $this->sendError('Depot not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -73,8 +122,26 @@ class DepotController extends ApiController
      * @param  \App\Models\Depot  $depot
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Depot $depot)
+    public function destroy($depot_id)
     {
-        //
+        try
+        {
+            $depot = Depot::find($depot_id);
+
+            if ($depot)
+            {
+                $depot->delete();
+                return $this->sendResponse([], 'Depot sucessfully deleted.');
+            }
+            else
+            {
+                return $this->sendError('Depot not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 }
