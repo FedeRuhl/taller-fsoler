@@ -45,6 +45,19 @@ class CreateDepotProductTable extends Migration
      */
     public function down()
     {
+        Schema::table('depot_product', function (Blueprint $table) {
+            $dbDriver = DB::getDriverName();
+
+            if ($dbDriver !== 'sqlite')
+            {
+                $table->dropForeign('depot_id');
+                $table->dropForeign('product_id');
+            }
+        });
+
+        Schema::dropColumns('depot_product', ['depot_id']);
+        Schema::dropColumns('depot_product', ['product_id']);
+
         Schema::dropIfExists('depot_product');
     }
 }

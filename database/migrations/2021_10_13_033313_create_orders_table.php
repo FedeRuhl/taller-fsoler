@@ -51,6 +51,21 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
+        Schema::table('orders', function (Blueprint $table) {
+            $dbDriver = DB::getDriverName();
+
+            if ($dbDriver !== 'sqlite')
+            {
+                $table->dropForeign('owner_id');
+                $table->dropForeign('supplier_id');
+                $table->dropForeign('order_type_id');
+            }
+        });
+
+        Schema::dropColumns('orders', ['owner_id']);
+        Schema::dropColumns('orders', ['supplier_id']);
+        Schema::dropColumns('orders', ['order_type_id']);
+
         Schema::dropIfExists('orders');
     }
 }

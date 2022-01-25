@@ -34,6 +34,18 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
+        
+        Schema::table('products', function (Blueprint $table) {
+            $dbDriver = DB::getDriverName();
+
+            if ($dbDriver !== 'sqlite')
+            {
+                $table->dropForeign('generic_id');
+            }
+            
+            $table->dropColumn('generic_id');
+        });
+
         Schema::dropIfExists('products');
     }
 }

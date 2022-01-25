@@ -42,6 +42,19 @@ class CreateGenericRequestsTable extends Migration
      */
     public function down()
     {
+        Schema::table('generic_requests', function (Blueprint $table) {
+            $dbDriver = DB::getDriverName();
+
+            if ($dbDriver !== 'sqlite')
+            {
+                $table->dropForeign('request_id');
+                $table->dropForeign('generic_id');
+            }
+        });
+
+        Schema::dropColumns('generic_requests', ['request_id']);
+        Schema::dropColumns('generic_requests', ['generic_id']);
+
         Schema::dropIfExists('generic_requests');
     }
 }

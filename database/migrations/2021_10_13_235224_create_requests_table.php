@@ -43,6 +43,19 @@ class CreateRequestsTable extends Migration
      */
     public function down()
     {
+        Schema::table('requests', function (Blueprint $table) {
+            $dbDriver = DB::getDriverName();
+
+            if ($dbDriver !== 'sqlite')
+            {
+                $table->dropForeign('owner_id');
+                $table->dropForeign('hospitalization_id');
+            }
+        });
+
+        Schema::dropColumns('requests', ['owner_id']);
+        Schema::dropColumns('requests', ['hospitalization_id']);
+
         Schema::dropIfExists('requests');
     }
 }

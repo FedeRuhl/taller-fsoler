@@ -43,6 +43,19 @@ class CreatePatientsTable extends Migration
      */
     public function down()
     {
+        Schema::table('patients', function (Blueprint $table) {
+            $dbDriver = DB::getDriverName();
+
+            if ($dbDriver !== 'sqlite')
+            {
+                $table->dropForeign('person_id');
+                $table->dropForeign('unit_id');
+            }
+        });
+
+        Schema::dropColumns('patients', ['person_id']);
+        Schema::dropColumns('patients', ['unit_id']);
+
         Schema::dropIfExists('patients');
     }
 }

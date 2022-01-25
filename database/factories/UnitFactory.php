@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Unit;
+use App\Models\UnitUbication;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UnitFactory extends Factory
@@ -21,8 +22,10 @@ class UnitFactory extends Factory
      */
     public function definition()
     {
+        $unitUbication = UnitUbication::factory()->create();
+        
         return [
-            'unit_ubication_id' => $this->faker->unique()->randomElement([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+            'unit_ubication_id' => $unitUbication->id,
             'name' => $this->faker->word()
         ];
     }

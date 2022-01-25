@@ -34,6 +34,17 @@ class CreatePhonesTable extends Migration
      */
     public function down()
     {
+        Schema::table('phones', function (Blueprint $table) {
+            $dbDriver = DB::getDriverName();
+
+            if ($dbDriver !== 'sqlite')
+            {
+                $table->dropForeign('person_id');
+            }
+        });
+
+        Schema::dropColumns('phones', ['person_id']);
+
         Schema::dropIfExists('phones');
     }
 }

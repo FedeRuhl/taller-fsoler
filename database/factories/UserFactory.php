@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Person;
 use App\Models\User;
+use App\Models\UserClass;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserFactory extends Factory
@@ -21,9 +23,13 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+
+        $person = Person::factory()->create();
+        $userClass = UserClass::inRandomOrder()->first();
+
         return [
-            'person_id' => $this->faker->unique()->numberBetween(1, 10),
-            'user_class_id' => $this->faker->numberBetween(1, 4),
+            'person_id' => $person->id,
+            'user_class_id' => $userClass->id,
             'docket' => $this->faker->randomNumber(8, true),
             'username' => $this->faker->userName(),
             'email' => $this->faker->email(),

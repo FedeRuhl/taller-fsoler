@@ -37,6 +37,17 @@ class CreateSuppliersTable extends Migration
      */
     public function down()
     {
+        Schema::table('suppliers', function (Blueprint $table) {
+            $dbDriver = DB::getDriverName();
+
+            if ($dbDriver !== 'sqlite')
+            {
+                $table->dropForeign('supplier_address_id');
+            }
+        });
+
+        Schema::dropColumns('suppliers', ['supplier_address_id']);
+
         Schema::dropIfExists('suppliers');
     }
 }

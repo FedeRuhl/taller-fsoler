@@ -51,6 +51,19 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::table('users', function (Blueprint $table) {
+            $dbDriver = DB::getDriverName();
+
+            if ($dbDriver !== 'sqlite')
+            {
+                $table->dropForeign('person_id');
+                $table->dropForeign('user_class_id');
+            }
+        });
+
+        Schema::dropColumns('users', ['person_id']);
+        Schema::dropColumns('users', ['user_class_id']);
+
         Schema::dropIfExists('users');
     }
 }

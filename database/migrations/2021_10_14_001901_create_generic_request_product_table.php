@@ -39,6 +39,19 @@ class CreateGenericRequestProductTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_generic_request');
+        Schema::table('generic_request_product', function (Blueprint $table) {
+            $dbDriver = DB::getDriverName();
+
+            if ($dbDriver !== 'sqlite')
+            {
+                $table->dropForeign('generic_request_id');
+                $table->dropForeign('product_id');
+            }
+        });
+
+        Schema::dropColumns('generic_request_product', ['generic_request_id']);
+        Schema::dropColumns('generic_request_product', ['product_id']);
+
+        Schema::dropIfExists('generic_request_product');
     }
 }
