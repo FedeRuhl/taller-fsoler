@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\DepotController;
 use App\Http\Controllers\Api\GenericController;
+use App\Http\Controllers\Api\RequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('depots')
     ->name('depots.')
-    ->group(function() {
+    ->group(function () {
         Route::get('/', [DepotController::class, 'index'])
             ->name('index');
 
@@ -41,7 +42,7 @@ Route::prefix('depots')
 
 Route::prefix('generics')
     ->name('generics.')
-    ->group(function() {
+    ->group(function () {
         Route::get('/', [GenericController::class, 'index'])
             ->name('index');
 
@@ -55,5 +56,24 @@ Route::prefix('generics')
             ->name('update');
 
         Route::delete('/{generic_id}', [GenericController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+Route::prefix('requests')
+    ->name('requests.')
+    ->group(function () {
+        Route::get('/', [RequestController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [RequestController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{request_id}', [RequestController::class, 'show'])
+            ->name('show');
+
+        Route::put('/{request_id}', [RequestController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{request_id}', [RequestController::class, 'destroy'])
             ->name('destroy');
     });

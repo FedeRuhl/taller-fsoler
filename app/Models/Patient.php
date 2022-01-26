@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Patient extends Model
 {
     use HasFactory;
+
+    public function Person()
+    {
+        return $this->belongsTo(Person::class);
+    }
+
+    public function Unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
 }
