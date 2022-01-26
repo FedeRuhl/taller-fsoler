@@ -52,7 +52,7 @@ class DepotCRUDTest extends TestCase
         ]);
     }
 
-    public function test_depots_can_be_showed()
+    public function test_a_depot_can_be_showed()
     {
         $this->withoutExceptionHandling();
 

@@ -59,7 +59,7 @@ class RequestCRUDTest extends TestCaseWithSeed
         $response->assertStatus(200);
     }
 
-    public function test_requests_can_be_showed()
+    public function test_a_request_can_be_showed()
     {
         $this->withoutExceptionHandling();
 

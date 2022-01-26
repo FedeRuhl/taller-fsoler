@@ -9,6 +9,13 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
+    public function Generic()
+    {
+        return $this->belongsTo(Generic::class);
+    }
+
     public function depots()
     {
         return $this->belongsToMany(Depot::class);

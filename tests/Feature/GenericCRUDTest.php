@@ -55,7 +55,7 @@ class GenericCRUDTest extends TestCase
         $this->assertDatabaseHas('generics', $expectedAttributes);
     }
 
-    public function test_generics_can_be_showed()
+    public function test_a_generic_can_be_showed()
     {
         $this->withoutExceptionHandling();
 

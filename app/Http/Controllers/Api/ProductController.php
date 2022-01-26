@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Exception;
 
-class ProductController extends Controller
+class ProductController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +17,20 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        try
+        {
+            $products = Product::all();
+
+            if ($products)
+            {
+                return $this->sendResponse(ProductResource::collection($products), 'Products sucessfully listed.');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -24,9 +39,22 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        //
+        try
+        {
+            $product = Product::create($request->validated());
+
+            if ($product)
+            {
+                return $this->sendResponse(new ProductResource($product), 'Request sucessfully created.');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -35,9 +63,26 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($product_id)
     {
-        //
+        try
+        {
+            $product = Product::find($product_id);
+
+            if ($product)
+            {
+                return $this->sendResponse(new ProductResource($product), 'Product sucessfully found.');
+            }
+            else
+            {
+                return $this->sendError('Product not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -47,9 +92,28 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, $product_id)
     {
-        //
+        try
+        {
+            $validated = $request->safe()->except(['product_id']);
+            $product = Product::find($product_id);
+
+            if ($product)
+            {
+                $product->update($validated);
+                return $this->sendResponse(new ProductResource($product), 'Product sucessfully updated.');
+            }
+            else
+            {
+                return $this->sendError('Product not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -58,8 +122,26 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($product_id)
     {
-        //
+        try
+        {
+            $product = Product::find($product_id);
+
+            if ($product)
+            {
+                $product->delete();
+                return $this->sendResponse([], 'Product sucessfully deleted.');
+            }
+            else
+            {
+                return $this->sendError('Product not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 }
