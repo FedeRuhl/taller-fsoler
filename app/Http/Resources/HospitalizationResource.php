@@ -16,8 +16,8 @@ class HospitalizationResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'patient' => new PatientResource($this->Patient),
-            'service' => new ServiceResource($this->Service),
+            'patient' => new PatientResource($this->patient),
+            'service' => new ServiceResource($this->service),
             'is_ambulatory' => $this->is_ambulatory,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date

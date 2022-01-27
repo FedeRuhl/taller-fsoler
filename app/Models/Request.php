@@ -13,7 +13,8 @@ class Request extends Model
 
     public function owner()
     {
-        return $this->belongsTo(User::class, 'owner_id', 'id');
+        return $this->belongsTo(User::class, 'owner_id', 'id')
+            ->whereRelation('userClass', 'name', '=', 'Personal de sanidad');
     }
 
     public function hospitalization()

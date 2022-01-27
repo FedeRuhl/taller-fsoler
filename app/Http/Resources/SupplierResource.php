@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Models\SupplierAddress;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource
+class SupplierResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +17,9 @@ class ProductResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'generic' => new GenericResource($this->generic),
-            'lab' => $this->lab
+            'address' => new SupplierAddressResource($this->address),
+            'CUIT' => $this->CUIT,
+            'company_name' => $this->company_name
         ];
     }
 }

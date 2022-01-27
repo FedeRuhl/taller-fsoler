@@ -14,6 +14,10 @@ class UserClassSeeder extends Seeder
      */
     public function run()
     {
-        UserClass::factory()->count(4)->create();
+        UserClass::create([
+            'name' => 'Personal de sanidad'
+        ]);
+
+        UserClass::factory()->count(3)->create();
     }
 }

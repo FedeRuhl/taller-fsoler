@@ -9,12 +9,12 @@ class Patient extends Model
 {
     use HasFactory;
 
-    public function Person()
+    public function person()
     {
         return $this->belongsTo(Person::class);
     }
 
-    public function Unit()
+    public function unit()
     {
         return $this->belongsTo(Unit::class);
     }

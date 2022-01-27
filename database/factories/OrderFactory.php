@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -21,8 +22,11 @@ class OrderFactory extends Factory
      */
     public function definition()
     {
+        $owner = User::whereRelation('userClass', 'name', '=', 'Personal de sanidad')
+            ->inRandomOrder()->first();
+
         return [
-            'owner_id' => $this->faker->numberBetween(1, 10),
+            'owner_id' => $owner->id,
             'supplier_id' => $this->faker->numberBetween(1, 10),
             'order_type_id' => $this->faker->numberBetween(1, 4),
             'number' => $this->faker->phoneNumber(),

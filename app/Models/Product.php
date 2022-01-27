@@ -11,7 +11,7 @@ class Product extends Model
 
     protected $guarded = [];
 
-    public function Generic()
+    public function generic()
     {
         return $this->belongsTo(Generic::class);
     }

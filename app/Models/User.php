@@ -42,12 +42,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function Person()
+    public function person()
     {
         return $this->belongsTo(Person::class);
     }
 
-    public function UserClass()
+    public function userClass()
     {
         return $this->belongsTo(UserClass::class);
     }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\DepotController;
 use App\Http\Controllers\Api\GenericController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RequestController;
 use Illuminate\Http\Request;
@@ -95,5 +96,24 @@ Route::prefix('products')
             ->name('update');
 
         Route::delete('/{product_id}', [ProductController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+Route::prefix('orders')
+    ->name('orders.')
+    ->group(function () {
+        Route::get('/', [OrderController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [OrderController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{order_id}', [OrderController::class, 'show'])
+            ->name('show');
+
+        Route::put('/{order_id}', [OrderController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{order_id}', [OrderController::class, 'destroy'])
             ->name('destroy');
     });
