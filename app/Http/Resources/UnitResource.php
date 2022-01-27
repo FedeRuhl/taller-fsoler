@@ -16,7 +16,7 @@ class UnitResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'ubication' => new UbicationResource($this->Ubication),
+            'ubication' => new UbicationResource($this->ubication),
             'name' => $this->name
         ];
     }

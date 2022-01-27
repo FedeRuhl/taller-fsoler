@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Generic;
+namespace App\Http\Requests\Service;
 
 use App\Rules\ModelExists;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateGenericRequest extends FormRequest
+class UpdateServiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,16 +25,13 @@ class UpdateGenericRequest extends FormRequest
     public function rules()
     {
         return [
-            'generic_id' => 'exists:generics,id|unique:generics,id,' . $this->generic_id,
-            'SIByS_code' => 'string',
-            'name' => 'string',
-            'is_disposable' => 'boolean',
-            'presentation' => 'string'
+            'service_id' => 'exists:services,id|unique:services,id,' . $this->service_id,
+            'name' => 'string'
         ];
     }
 
     protected function prepareForValidation() 
     {
-        $this->merge(['generic_id' => $this->route('generic_id')]);
+        $this->merge(['service_id' => $this->route('service_id')]);
     }
 }

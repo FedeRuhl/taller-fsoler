@@ -3,8 +3,10 @@
 use App\Http\Controllers\Api\DepotController;
 use App\Http\Controllers\Api\GenericController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RequestController;
+use App\Http\Controllers\Api\ServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -115,5 +117,43 @@ Route::prefix('orders')
             ->name('update');
 
         Route::delete('/{order_id}', [OrderController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+Route::prefix('services')
+    ->name('services.')
+    ->group(function () {
+        Route::get('/', [ServiceController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [ServiceController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{service_id}', [ServiceController::class, 'show'])
+            ->name('show');
+
+        Route::put('/{service_id}', [ServiceController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{service_id}', [ServiceController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+Route::prefix('patients')
+    ->name('patients.')
+    ->group(function () {
+        Route::get('/', [PatientController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [PatientController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{patient_id}', [PatientController::class, 'show'])
+            ->name('show');
+
+        Route::put('/{patient_id}', [PatientController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{patient_id}', [PatientController::class, 'destroy'])
             ->name('destroy');
     });

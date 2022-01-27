@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Generic;
+namespace App\Http\Requests\Patient;
 
 use App\Rules\ModelExists;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateGenericRequest extends FormRequest
+class UpdatePatientRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,16 +25,17 @@ class UpdateGenericRequest extends FormRequest
     public function rules()
     {
         return [
-            'generic_id' => 'exists:generics,id|unique:generics,id,' . $this->generic_id,
-            'SIByS_code' => 'string',
-            'name' => 'string',
-            'is_disposable' => 'boolean',
-            'presentation' => 'string'
+            'patient_id' => 'exists:patients,id|unique:patients,id,' . $this->patient_id,
+            'person_id' => 'integer|exists:people,id',
+            'unit_id' => 'integer|exists:units,id',
+            'os_number' => 'string',
+            'status' => 'nullable|string',
+            'is_military' => 'boolean'
         ];
     }
 
     protected function prepareForValidation() 
     {
-        $this->merge(['generic_id' => $this->route('generic_id')]);
+        $this->merge(['patient_id' => $this->route('patient_id')]);
     }
 }

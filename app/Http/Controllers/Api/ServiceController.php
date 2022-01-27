@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\Service\StoreServiceRequest;
+use App\Http\Requests\Service\UpdateServiceRequest;
+use App\Http\Resources\ServiceResource;
 use App\Models\Service;
-use Illuminate\Http\Request;
+use Exception;
 
-class ServiceController extends Controller
+class ServiceController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +18,20 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        //
+        try
+        {
+            $services = Service::all();
+
+            if ($services)
+            {
+                return $this->sendResponse(ServiceResource::collection($services), 'Services sucessfully listed.');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -24,9 +40,22 @@ class ServiceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreServiceRequest $request)
     {
-        //
+        try
+        {
+            $service = Service::create($request->validated());
+
+            if ($service)
+            {
+                return $this->sendResponse(new ServiceResource($service), 'Service sucessfully created.');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -35,9 +64,26 @@ class ServiceController extends Controller
      * @param  \App\Models\Service  $service
      * @return \Illuminate\Http\Response
      */
-    public function show(Service $service)
+    public function show($service_id)
     {
-        //
+        try
+        {
+            $service = Service::find($service_id);
+
+            if ($service)
+            {
+                return $this->sendResponse(new ServiceResource($service), 'Service sucessfully found.');
+            }
+            else
+            {
+                return $this->sendError('Service not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -47,9 +93,28 @@ class ServiceController extends Controller
      * @param  \App\Models\Service  $service
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Service $service)
+    public function update(UpdateServiceRequest $request, $service_id)
     {
-        //
+        try
+        {
+            $validated = $request->safe()->except(['service_id']);
+            $service = Service::find($service_id);
+
+            if ($service)
+            {
+                $service->update($validated);
+                return $this->sendResponse(new ServiceResource($service), 'Service sucessfully updated.');
+            }
+            else
+            {
+                return $this->sendError('Service not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -58,8 +123,26 @@ class ServiceController extends Controller
      * @param  \App\Models\Service  $service
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Service $service)
+    public function destroy($service_id)
     {
-        //
+        try
+        {
+            $service = Service::find($service_id);
+
+            if ($service)
+            {
+                $service->delete();
+                return $this->sendResponse([], 'Service sucessfully deleted.');
+            }
+            else
+            {
+                return $this->sendError('Service not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 }

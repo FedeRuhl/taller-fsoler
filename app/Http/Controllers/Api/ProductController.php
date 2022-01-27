@@ -47,7 +47,7 @@ class ProductController extends ApiController
 
             if ($product)
             {
-                return $this->sendResponse(new ProductResource($product), 'Request sucessfully created.');
+                return $this->sendResponse(new ProductResource($product), 'Product sucessfully created.');
             }
         }
         

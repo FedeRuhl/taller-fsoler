@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Generic;
+namespace App\Http\Requests\Service;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreGenericRequest extends FormRequest
+class StoreServiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,7 @@ class StoreGenericRequest extends FormRequest
     public function rules()
     {
         return [
-            'SIByS_code' => 'required|string|unique:generics',
-            'name' => 'required|string',
-            'is_disposable' => 'boolean',
-            'presentation' => 'string'
+            'name' => 'required|string'
         ];
     }
 }
