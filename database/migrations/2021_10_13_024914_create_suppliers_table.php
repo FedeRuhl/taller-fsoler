@@ -22,7 +22,7 @@ class CreateSuppliersTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('CUIT', false, true)->unique();
+            $table->string('CUIT', 11)->unique();
 
             $table->string('company_name'); // razón social
 

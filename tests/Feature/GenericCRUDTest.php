@@ -40,7 +40,7 @@ class GenericCRUDTest extends TestCase
         $this->assertDatabaseCount('generics', 0);
 
         $expectedAttributes = [
-            'SIByS_code' => 1234,
+            'SIByS_code' => '1234',
             'name' => 'Genérico N° 1',
             'is_disposable' => 0,
             'presentation' => 'Presentación del genérico N° 1.'
@@ -60,7 +60,7 @@ class GenericCRUDTest extends TestCase
         $this->withoutExceptionHandling();
 
         $expectedGeneric = Generic::create([
-            'SIByS_code' => 1234,
+            'SIByS_code' => '1234',
             'name' => 'Genérico N° 1',
             'is_disposable' => 0,
             'presentation' => 'Presentación del genérico N° 1.'
@@ -80,7 +80,7 @@ class GenericCRUDTest extends TestCase
         $this->withoutExceptionHandling();
 
         $generic = Generic::create([
-            'SIByS_code' => 1234,
+            'SIByS_code' => '1234',
             'name' => 'Genérico N° 1',
             'is_disposable' => 0,
             'presentation' => 'Presentación del genérico N° 1.'
@@ -103,7 +103,7 @@ class GenericCRUDTest extends TestCase
         $this->withoutExceptionHandling();
 
         $generic = Generic::create([
-            'SIByS_code' => 1234,
+            'SIByS_code' => '1234',
             'name' => 'Genérico N° 1',
             'is_disposable' => 0,
             'presentation' => 'Presentación del genérico N° 1.'
