@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\UserClass\StoreUserClassRequest;
+use App\Http\Requests\UserClass\UpdateUserClassRequest;
+use App\Http\Resources\UserClassResource;
 use App\Models\UserClass;
-use Illuminate\Http\Request;
+use Exception;
 
-class UserClassController extends Controller
+class UserClassController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +18,20 @@ class UserClassController extends Controller
      */
     public function index()
     {
-        //
+        try
+        {
+            $userClasses = UserClass::all();
+
+            if ($userClasses)
+            {
+                return $this->sendResponse(UserClassResource::collection($userClasses), 'User classes sucessfully listed.');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -24,9 +40,22 @@ class UserClassController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserClassRequest $request)
     {
-        //
+        try
+        {
+            $userClass = UserClass::create($request->validated());
+
+            if ($userClass)
+            {
+                return $this->sendResponse(new UserClassResource($userClass), 'User class sucessfully created.');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -35,9 +64,26 @@ class UserClassController extends Controller
      * @param  \App\Models\UserClass  $userClass
      * @return \Illuminate\Http\Response
      */
-    public function show(UserClass $userClass)
+    public function show($user_class_id)
     {
-        //
+        try
+        {
+            $userClass = UserClass::find($user_class_id);
+
+            if ($userClass)
+            {
+                return $this->sendResponse(new UserClassResource($userClass), 'User class sucessfully found.');
+            }
+            else
+            {
+                return $this->sendError('User class not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -47,9 +93,29 @@ class UserClassController extends Controller
      * @param  \App\Models\UserClass  $userClass
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserClass $userClass)
+    public function update(UpdateUserClassRequest $request, $user_class_id)
     {
-        //
+        try
+        {
+            $validated = $request->safe()->except(['user_class_id']);
+            $userClass = UserClass::find($user_class_id);
+
+            if ($userClass)
+            {
+                $userClass->update($validated);
+                $userClass->save();
+                return $this->sendResponse(new UserClassResource($userClass), 'User class sucessfully updated.');
+            }
+            else
+            {
+                return $this->sendError('User class not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -58,8 +124,26 @@ class UserClassController extends Controller
      * @param  \App\Models\UserClass  $userClass
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserClass $userClass)
+    public function destroy($user_class_id)
     {
-        //
+        try
+        {
+            $userClass = UserClass::find($user_class_id);
+
+            if ($userClass)
+            {
+                $userClass->delete();
+                return $this->sendResponse([], 'User class sucessfully deleted.');
+            }
+            else
+            {
+                return $this->sendError('User class not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 }
