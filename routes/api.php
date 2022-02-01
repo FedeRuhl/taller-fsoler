@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RequestController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\UnitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -195,5 +196,24 @@ Route::prefix('suppliers')
             ->name('update');
 
         Route::delete('/{supplier_id}', [SupplierController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+Route::prefix('units')
+    ->name('units.')
+    ->group(function () {
+        Route::get('/', [UnitController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [UnitController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{unit_id}', [UnitController::class, 'show'])
+            ->name('show');
+
+        Route::put('/{unit_id}', [UnitController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{unit_id}', [UnitController::class, 'destroy'])
             ->name('destroy');
     });

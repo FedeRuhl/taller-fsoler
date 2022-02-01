@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\Unit\StoreUnitRequest;
+use App\Http\Requests\Unit\UpdateUnitRequest;
+use App\Http\Resources\UnitResource;
 use App\Models\Unit;
-use Illuminate\Http\Request;
+use App\Models\UnitUbication;
+use Exception;
 
-class UnitController extends Controller
+class UnitController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +19,20 @@ class UnitController extends Controller
      */
     public function index()
     {
-        //
+        try
+        {
+            $units = Unit::all();
+
+            if ($units)
+            {
+                return $this->sendResponse(UnitResource::collection($units), 'Units sucessfully listed.');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -24,9 +41,37 @@ class UnitController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUnitRequest $request)
     {
-        //
+        try
+        {
+            $unitUbication = UnitUbication::create(
+                $request->only([
+                    'city',
+                    'province',
+                    'zip_code'
+                ])
+            );
+
+            $unit = Unit::create(
+                $request->merge([
+                    'unit_ubication_id' => $unitUbication->id
+                ])->only([
+                    'name',
+                    'unit_ubication_id'
+                ])
+            );
+
+            if ($unit)
+            {
+                return $this->sendResponse(new UnitResource($unit), 'Unit sucessfully created.');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -35,9 +80,26 @@ class UnitController extends Controller
      * @param  \App\Models\Unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function show(Unit $unit)
+    public function show($unit_id)
     {
-        //
+        try
+        {
+            $unit = Unit::find($unit_id);
+
+            if ($unit)
+            {
+                return $this->sendResponse(new UnitResource($unit), 'Unit sucessfully found.');
+            }
+            else
+            {
+                return $this->sendError('Unit not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -47,9 +109,42 @@ class UnitController extends Controller
      * @param  \App\Models\Unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Unit $unit)
+    public function update(UpdateUnitRequest $request, $unit_id)
     {
-        //
+        try
+        {
+            $unit = Unit::find($unit_id);
+
+            if ($unit)
+            {
+                if ($request->hasAny(['city', 'province', 'zip_code']))
+                {
+                    $unit->ubication()->update($request->only([
+                        'city',
+                        'province',
+                        'zip_code'
+                    ]));
+                }
+
+                if ($request->has('name'))
+                {
+                    $unit->update($request->only([
+                        'name'
+                    ]));
+                }
+
+                return $this->sendResponse(new UnitResource($unit), 'Unit sucessfully updated.');
+            }
+            else
+            {
+                return $this->sendError('Unit not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 
     /**
@@ -58,8 +153,26 @@ class UnitController extends Controller
      * @param  \App\Models\Unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Unit $unit)
+    public function destroy($unit_id)
     {
-        //
+        try
+        {
+            $unit = Unit::find($unit_id);
+
+            if ($unit)
+            {
+                $unit->delete();
+                return $this->sendResponse([], 'Unit sucessfully deleted.');
+            }
+            else
+            {
+                return $this->sendError('Unit not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
     }
 }

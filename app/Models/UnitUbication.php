@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class UnitUbication extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'city',
+        'province',
+        'zip_code'
+    ];
 }
