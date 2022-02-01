@@ -26,11 +26,14 @@ class UpdatePatientRequest extends FormRequest
     {
         return [
             'patient_id' => 'exists:patients,id|unique:patients,id,' . $this->patient_id,
-            'person_id' => 'integer|exists:people,id',
-            'unit_id' => 'integer|exists:units,id',
+            'dni' => 'integer',
+            'first_name' => 'string',
+            'last_name' => 'string',
+            'birth_date' => 'date',
             'os_number' => 'string',
             'status' => 'nullable|string',
-            'is_military' => 'boolean'
+            'is_military' => 'boolean',
+            'unit_id' => 'integer|exists:units,id'
         ];
     }
 

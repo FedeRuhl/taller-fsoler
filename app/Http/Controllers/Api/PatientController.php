@@ -7,7 +7,9 @@ use App\Http\Requests\Patient\StorePatientRequest;
 use App\Http\Requests\Patient\UpdatePatientRequest;
 use App\Http\Resources\PatientResource;
 use App\Models\Patient;
+use App\Models\Person;
 use Exception;
+use Illuminate\Http\Request;
 
 class PatientController extends ApiController
 {
@@ -44,7 +46,26 @@ class PatientController extends ApiController
     {
         try
         {
-            $patient = Patient::create($request->validated());
+            $person = Person::create(
+                $request->only([
+                    'dni',
+                    'first_name',
+                    'last_name',
+                    'birth_date'
+                ])
+            );
+
+            $patient = Patient::create(
+                $request->merge([
+                    'person_id' => $person->id
+                ])->only([
+                    'os_number',
+                    'status',
+                    'is_military',
+                    'unit_id',
+                    'person_id'
+                ])
+            );
 
             if ($patient)
             {
@@ -97,12 +118,30 @@ class PatientController extends ApiController
     {
         try
         {
-            $validated = $request->safe()->except(['patient_id']);
             $patient = Patient::find($patient_id);
-
+            
             if ($patient)
             {
-                $patient->update($validated);
+                if ($request->hasAny(['dni', 'first_name', 'last_name', 'birth_date']))
+                {
+                    $patient->person()->update($request->only([
+                        'dni',
+                        'first_name',
+                        'last_name',
+                        'birth_date'
+                    ]));
+                }
+    
+                if ($request->hasAny(['os_number', 'status', 'is_military', 'unit_id']))
+                {
+                    $patient->update($request->only([
+                        'os_number',
+                        'status',
+                        'is_military',
+                        'unit_id'
+                    ]));
+                }
+
                 return $this->sendResponse(new PatientResource($patient), 'Patient sucessfully updated.');
             }
             else
@@ -131,7 +170,7 @@ class PatientController extends ApiController
 
             if ($patient)
             {
-                $patient->delete();
+                $patient->person()->delete(); //cascade
                 return $this->sendResponse([], 'Patient sucessfully deleted.');
             }
             else

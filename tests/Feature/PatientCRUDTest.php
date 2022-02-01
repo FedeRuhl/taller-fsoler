@@ -39,27 +39,40 @@ class PatientCRUDTest extends TestCaseWithSeed
     public function test_a_patient_can_be_created()
     {
         $this->withoutExceptionHandling();
+        
+        $peopleCount = Person::count();
+        $this->assertDatabaseCount('people', $peopleCount);
 
         $patientsCount = Patient::count();
         $this->assertDatabaseCount('patients', $patientsCount);
-
-        $personId = Person::value('id');
+        
         $unitId = Unit::value('id');
-
-        $expectedAttributes = [
-            'person_id' => $personId,
+        
+        $personExpectedAttributes = [
+            'dni' => 45369865,
+            'first_name' => 'Marcos',
+            'last_name' => 'Diaz',
+            'birth_date' => '2005-01-01'
+        ];
+        
+        $patientExpectedAttributes = [
             'unit_id' => $unitId,
             'os_number' => '123456',
             // 'status' => '',
             'is_military' => 1
         ];
         
-        $response = $this->postJson('api/patients', $expectedAttributes);
+        $parameters = array_merge($personExpectedAttributes, $patientExpectedAttributes);
         
-        $this->assertDatabaseCount('patients', $patientsCount + 1);
+        $response = $this->postJson('api/patients', $parameters);
         
-        $this->assertDatabaseHas('patients', $expectedAttributes);
         $response->assertStatus(200);
+
+        $this->assertDatabaseCount('people', $peopleCount + 1);
+        $this->assertDatabaseHas('people', $personExpectedAttributes);
+
+        $this->assertDatabaseCount('patients', $patientsCount + 1);
+        $this->assertDatabaseHas('patients', $patientExpectedAttributes);
     }
 
     public function test_a_patient_can_be_showed()
@@ -82,16 +95,24 @@ class PatientCRUDTest extends TestCaseWithSeed
         $this->withoutExceptionHandling();
 
         $patient = Patient::first();
+        $person = $patient->person;
 
         $response = $this->putJson('api/patients/' . $patient->id, [
+            'first_name' => 'Juan',
             'os_number' => '789101'
         ]);
 
         $response->assertStatus(200);
 
+        $this->assertDatabaseHas('people', [
+            'id' => $person->id,
+            'first_name' => 'Juan',
+        ]);
+
         $this->assertDatabaseHas('patients', [
             'id' => $patient->id,
-            'os_number' => '789101'
+            'os_number' => '789101',
+            'person_id' => $person->id
         ]);
     }
 

@@ -25,11 +25,14 @@ class StorePatientRequest extends FormRequest
     public function rules()
     {
         return [
-            'person_id' => 'required|integer|exists:people,id',
-            'unit_id' => 'required|integer|exists:units,id',
+            'dni' => 'required|integer',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'birth_date' => 'required|date',
             'os_number' => 'required|string',
             'status' => 'nullable|string',
-            'is_military' => 'required|boolean'
+            'is_military' => 'required|boolean',
+            'unit_id' => 'required|integer|exists:units,id'
         ];
     }
 }

@@ -10,6 +10,13 @@ class Person extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'dni',
+        'first_name',
+        'last_name',
+        'birth_date'
+    ];
+
     public function getAgeAttribute() {
         return Carbon::parse($this->birth_date)->age;
     }
