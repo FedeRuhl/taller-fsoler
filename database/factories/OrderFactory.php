@@ -22,7 +22,7 @@ class OrderFactory extends Factory
      */
     public function definition()
     {
-        $owner = User::whereRelation('userClass', 'name', '=', 'Personal de sanidad')
+        $owner = User::whereRelation('userClass', 'name', '!=', 'admin')
             ->inRandomOrder()->first();
 
         return [

@@ -12,10 +12,11 @@ class UserClassSeeder extends Seeder
      *
      * @return void
      */
+
     public function run()
     {
         UserClass::create([
-            'name' => 'Personal de sanidad'
+            'name' => 'admin'
         ]);
 
         UserClass::factory()->count(3)->create();

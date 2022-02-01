@@ -43,7 +43,7 @@ class OrderCRUDTest extends TestCaseWithSeed
         $ordersCount = Order::count();
         $this->assertDatabaseCount('orders', $ordersCount);
 
-        $ownerId = User::whereRelation('userClass', 'name', '=', 'Personal de sanidad')
+        $ownerId = User::whereRelation('userClass', 'name', '!=', 'admin')
             ->value('id');
         $supplierId = Supplier::value('id');
         $orderTypeId = OrderType::value('id');

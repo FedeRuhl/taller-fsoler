@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $person = Person::factory()->create();
-        $userClass = UserClass::where('name', 'Personal de sanidad')->firstOrFail();
+        $userClass = UserClass::where('name', '!=', 'admin')->firstOrFail();
 
         User::create([
             'person_id' => $person->id,

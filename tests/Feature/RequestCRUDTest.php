@@ -41,7 +41,7 @@ class RequestCRUDTest extends TestCaseWithSeed
         $requestsCount = Request::count();
         $this->assertDatabaseCount('requests', $requestsCount);
 
-        $ownerId = User::whereRelation('userClass', 'name', '=', 'Personal de sanidad')
+        $ownerId = User::whereRelation('userClass', 'name', '!=', 'admin')
             ->value('id');
         $hospitalizationId = Hospitalization::value('id');
 
