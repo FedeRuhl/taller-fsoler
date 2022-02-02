@@ -18,9 +18,11 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name',
+        'docket', //legajo
         'email',
         'password',
+        'user_class_id',
+        'person_id'
     ];
 
     /**

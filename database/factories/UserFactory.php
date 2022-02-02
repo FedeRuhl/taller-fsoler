@@ -31,7 +31,6 @@ class UserFactory extends Factory
             'person_id' => $person->id,
             'user_class_id' => $userClass->id,
             'docket' => $this->faker->randomNumber(8, true),
-            'username' => $this->faker->userName(),
             'email' => $this->faker->email(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         ];

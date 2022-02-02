@@ -28,9 +28,7 @@ class CreateUsersTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('docket')->index(); //legajo
-
-            $table->string('username');
+            $table->string('docket')->index(); //legajo
 
             $table->string('email')->unique();
 

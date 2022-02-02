@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\RequestController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\UnitController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserClassController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -235,5 +236,24 @@ Route::prefix('user-classes')
             ->name('update');
 
         Route::delete('/{user_class_id}', [UserClassController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+Route::prefix('users')
+    ->name('users.')
+    ->group(function () {
+        Route::get('/', [UserController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [UserController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{user_id}', [UserController::class, 'show'])
+            ->name('show');
+
+        Route::put('/{user_id}', [UserController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{user_id}', [UserController::class, 'destroy'])
             ->name('destroy');
     });

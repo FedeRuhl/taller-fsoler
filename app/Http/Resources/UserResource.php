@@ -19,7 +19,6 @@ class UserResource extends JsonResource
             'person' => new PersonResource($this->person),
             'user_class' => new UserClassResource($this->userClass),
             'docket' => $this->docket,
-            'username' => $this->username,
             'email' => $this->email
         ];
     }
