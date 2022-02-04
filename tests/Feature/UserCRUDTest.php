@@ -10,7 +10,6 @@ use Tests\TestCaseWithSeed;
 
 class UserCRUDTest extends TestCaseWithSeed
 {
-    // TODO: agregar endpoint para agregar relación con teléfono, también hacerlo en pacientes
     use DatabaseMigrations;
 
     /**

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\GenericController;
 use App\Http\Controllers\Api\HospitalizationController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PatientController;
+use App\Http\Controllers\Api\PhoneController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RequestController;
 use App\Http\Controllers\Api\ServiceController;
@@ -255,5 +256,24 @@ Route::prefix('users')
             ->name('update');
 
         Route::delete('/{user_id}', [UserController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+Route::prefix('phones')
+    ->name('phones.')
+    ->group(function () {
+        Route::get('/person/{person_id}', [PhoneController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [PhoneController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{phone_id}', [PhoneController::class, 'show'])
+            ->name('show');
+
+        Route::put('/{phone_id}', [PhoneController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{phone_id}', [PhoneController::class, 'destroy'])
             ->name('destroy');
     });

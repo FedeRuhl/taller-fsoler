@@ -9,7 +9,10 @@ class Phone extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'person_id',
+        'number'
+    ];
 
     public function person() {
         return $this->belongsTo(Person::class);
