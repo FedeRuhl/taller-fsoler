@@ -2,13 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\Order;
-use App\Models\Supplier;
 use App\Models\OrderType;
-use Tests\TestCaseWithSeed;
 use App\Models\Product;
+use App\Models\Supplier;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\DB;
+use Tests\TestCaseWithSeed;
 
 class OrderCRUDTest extends TestCaseWithSeed
 {
@@ -40,7 +41,7 @@ class OrderCRUDTest extends TestCaseWithSeed
         $this->withoutExceptionHandling();
 
         $ordersCount = Order::count();
-        $this->assertDatabaseCount('orders', $ordersCount);
+        $orderProductCount = DB::table('order_product')->count();
 
         $products = Product::select('id')
             ->take('2')
@@ -68,10 +69,9 @@ class OrderCRUDTest extends TestCaseWithSeed
         ];
         
         $response = $this->postJson('api/orders', $expectedAttributes);
-
-        unset($expectedAttributes['product_ids']);
         
         $this->assertDatabaseCount('orders', $ordersCount + 1);
+        $this->assertDatabaseCount('order_product', $orderProductCount + count($products));
         
         unset($expectedAttributes['products']);
         $this->assertDatabaseHas('orders', $expectedAttributes);

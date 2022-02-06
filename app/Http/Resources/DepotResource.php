@@ -14,9 +14,20 @@ class DepotResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'id' => $this->id,
             'name' => $this->name
         ];
+
+        if (isset($this->pivot->stock))
+            $data['product_stock'] = $this->pivot->stock;
+
+        if (isset($this->pivot->expiration_date))
+            $data['product_expiration_date'] = $this->pivot->expiration_date;
+
+        if (isset($this->pivot->lote_code))
+            $data['product_lote_code'] = $this->pivot->lote_code;
+
+        return $data;
     }
 }

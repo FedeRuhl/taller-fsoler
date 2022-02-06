@@ -26,15 +26,13 @@ class CreateDepotProductTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('stock')->nullable();
+            $table->integer('stock');
 
             $table->date('expiration_date')->nullable();
 
             $table->string('lote_code')->nullable();
 
             $table->timestamps();
-
-            $table->index(['depot_id', 'product_id']);
         });
     }
 

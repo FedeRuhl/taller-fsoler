@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    // COMPROBANTE
     use HasFactory;
 
     protected $fillable = [
@@ -19,8 +20,7 @@ class Order extends Model
 
     public function owner()
     {
-        return $this->belongsTo(User::class, 'owner_id', 'id')
-            ->whereRelation('userClass', 'name', '!=', 'admin');
+        return $this->belongsTo(User::class, 'owner_id', 'id');
     }
 
     public function supplier()

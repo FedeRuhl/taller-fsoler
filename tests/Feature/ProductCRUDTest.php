@@ -2,12 +2,11 @@
 
 namespace Tests\Feature;
 
-use Carbon\Carbon;
-use App\Models\User;
+use DB;
+use App\Models\Depot;
 use App\Models\Generic;
 use App\Models\Product;
 use Tests\TestCaseWithSeed;
-use App\Models\Hospitalization;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ProductCRUDTest extends TestCaseWithSeed
@@ -40,21 +39,36 @@ class ProductCRUDTest extends TestCaseWithSeed
         $this->withoutExceptionHandling();
 
         $productsCount = Product::count();
-        $this->assertDatabaseCount('products', $productsCount);
+        $depotProductCount = DB::table('depot_product')->count();
+
+        $depots = Depot::select('id')
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'stock' => random_int(1, 50),
+                    'expiration_date' => '2023-01-01',
+                    'lote_code' => 'ABC123'
+                ]; 
+            })
+            ->toArray();
 
         $genericId = Generic::value('id');
 
         $expectedAttributes = [
+            'depots' => $depots,
             'generic_id' => $genericId,
             'lab' => 'Test lab',
         ];
         
         $response = $this->postJson('api/products', $expectedAttributes);
+        $response->assertStatus(200);
         
         $this->assertDatabaseCount('products', $productsCount + 1);
+        $this->assertDatabaseCount('depot_product', $depotProductCount + count($depots));
         
+        unset($expectedAttributes['depots']);
         $this->assertDatabaseHas('products', $expectedAttributes);
-        $response->assertStatus(200);
     }
 
     public function test_a_product_can_be_showed()

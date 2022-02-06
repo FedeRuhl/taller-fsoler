@@ -25,6 +25,11 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
+            'depots' => 'required|array',
+            'depots.*.id' => 'required|integer|exists:depots,id',
+            'depots.*.stock' => 'required|integer',
+            'depots.*.expiration_date' => 'date',
+            'depots.*.lote_code' => 'string',
             'generic_id' => 'required|integer|exists:generics,id',
             'lab' => 'required|string'
         ];

@@ -26,6 +26,11 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'product_id' => 'exists:products,id|unique:products,id,' . $this->product_id,
+            'depots' => 'array',
+            'depots.*.id' => 'integer|exists:depots,id',
+            'depots.*.stock' => 'integer',
+            'depots.*.expiration_date' => 'date',
+            'depots.*.lote_code' => 'string',
             'generic_id' => 'integer|exists:generics,id',
             'lab' => 'string'
         ];

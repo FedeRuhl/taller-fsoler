@@ -21,6 +21,8 @@ class Product extends Model
 
     public function depots()
     {
-        return $this->belongsToMany(Depot::class);
+        return $this->belongsToMany(Depot::class)
+            ->withPivot(['id', 'stock', 'expiration_date', 'lote_code'])
+            ->withTimestamps();
     }
 }

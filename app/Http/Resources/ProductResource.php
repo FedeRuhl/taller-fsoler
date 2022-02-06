@@ -18,6 +18,7 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'generic' => new GenericResource($this->generic),
             'lab' => $this->lab,
+            'depots' => DepotResource::collection($this->depots)
         ];
 
         if (isset($this->pivot->product_quantity))
