@@ -7,10 +7,11 @@ use App\Http\Requests\Order\StoreOrderRequest;
 use App\Http\Requests\Order\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use DB;
 use Exception;
 
 class OrderController extends ApiController
-{
+{   
     /**
      * Display a listing of the resource.
      *
@@ -44,16 +45,33 @@ class OrderController extends ApiController
     {
         try
         {
-            $order = Order::create($request->validated());
+            $products = $request->get('products');
+            $syncProductsData = [];
+
+            foreach($products as $product)
+            {
+                $syncProductsData[$product['id']] = ['product_quantity' => $product['quantity']];
+            }
+
+            $orderData = $request->except('products');
+            
+            DB::beginTransaction();
+
+            $order = Order::create($orderData);
+            $order->products()->sync($syncProductsData);
 
             if ($order)
             {
+                DB::commit();
                 return $this->sendResponse(new OrderResource($order), 'Order sucessfully created.');
             }
+
+            DB::rollback();
         }
         
         catch(Exception $e)
         {
+            DB::rollback();
             return $this->sendError($e->errorInfo[2]);
         }
     }
@@ -97,12 +115,25 @@ class OrderController extends ApiController
     {
         try
         {
-            $validated = $request->safe()->except(['order_id']);
+            $validated = $request->safe()->except(['order_id', 'products']);
             $order = Order::find($order_id);
 
             if ($order)
             {
                 $order->update($validated);
+
+                if ($products = $request->get('products'))
+                {
+                    $syncProductsData = [];
+
+                    foreach($products as $product)
+                    {
+                        $syncProductsData[$product['id']] = ['product_quantity' => $product['quantity']];
+                    }
+
+                    $order->products()->sync($syncProductsData);
+                }
+
                 return $this->sendResponse(new OrderResource($order), 'Order sucessfully updated.');
             }
             else

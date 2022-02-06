@@ -14,10 +14,15 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'id' => $this->id,
             'generic' => new GenericResource($this->generic),
-            'lab' => $this->lab
+            'lab' => $this->lab,
         ];
+
+        if (isset($this->pivot->product_quantity))
+            $data['quantity'] = $this->pivot->product_quantity;
+
+        return $data;
     }
 }

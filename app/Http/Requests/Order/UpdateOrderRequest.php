@@ -25,6 +25,9 @@ class UpdateOrderRequest extends FormRequest
     public function rules()
     {
         return [
+            'products' => 'array',
+            'products.*.id' => 'integer|exists:products,id',
+            'products.*.quantity' => 'integer',
             'order_id' => 'exists:orders,id|unique:orders,id,' . $this->order_id,
             'owner_id' => 'integer|exists:users,id',
             'supplier_id' => 'integer|exists:suppliers,id',

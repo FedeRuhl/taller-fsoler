@@ -9,7 +9,13 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'owner_id',
+        'supplier_id',
+        'order_type_id',
+        'number',
+        'date'
+    ];
 
     public function owner()
     {
@@ -28,6 +34,8 @@ class Order extends Model
     }
 
     public function products() {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class)
+        ->withPivot(['id', 'product_quantity'])
+        ->withTimestamps();
     }
 }

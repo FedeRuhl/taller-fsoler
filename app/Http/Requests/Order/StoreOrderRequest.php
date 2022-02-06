@@ -25,7 +25,10 @@ class StoreOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'owner_id' => 'required|integer|exists:users,id',
+            'products' => 'required|array',
+            'products.*.id' => 'required|integer|exists:products,id',
+            'products.*.quantity' => 'required|integer',
+            'owner_id' => 'required|integer|exists:users,id', // probablemente sea el logueado
             'supplier_id' => 'required|integer|exists:suppliers,id',
             'order_type_id' => 'required|integer|exists:order_types,id',
             'number' => 'required|string',

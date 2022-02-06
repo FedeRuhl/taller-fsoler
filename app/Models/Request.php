@@ -25,6 +25,7 @@ class Request extends Model
     public function generics()
     {
         return $this->belongsToMany(Generic::class, 'generic_requests')
-            ->withPivot(['id', 'generics_total_quantity', 'generics_consumed_quantity']);
+            ->withPivot(['id', 'generics_total_quantity', 'generics_consumed_quantity'])
+            ->withTimestamps();
     }
 }

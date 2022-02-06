@@ -9,7 +9,10 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'generic_id',
+        'lab'
+    ];
 
     public function generic()
     {

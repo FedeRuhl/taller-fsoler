@@ -2,13 +2,12 @@
 
 namespace Tests\Feature;
 
-use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Supplier;
 use App\Models\OrderType;
 use Tests\TestCaseWithSeed;
-use App\Models\Hospitalization;
+use App\Models\Product;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class OrderCRUDTest extends TestCaseWithSeed
@@ -43,12 +42,24 @@ class OrderCRUDTest extends TestCaseWithSeed
         $ordersCount = Order::count();
         $this->assertDatabaseCount('orders', $ordersCount);
 
+        $products = Product::select('id')
+            ->take('2')
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'quantity' => random_int(1, 50)
+                ]; 
+            })
+            ->toArray();
+
         $ownerId = User::whereRelation('userClass', 'name', '!=', 'admin')
             ->value('id');
         $supplierId = Supplier::value('id');
         $orderTypeId = OrderType::value('id');
 
         $expectedAttributes = [
+            'products' => $products,
             'owner_id' => $ownerId,
             'supplier_id' => $supplierId,
             'order_type_id' => $orderTypeId,
@@ -57,9 +68,12 @@ class OrderCRUDTest extends TestCaseWithSeed
         ];
         
         $response = $this->postJson('api/orders', $expectedAttributes);
+
+        unset($expectedAttributes['product_ids']);
         
         $this->assertDatabaseCount('orders', $ordersCount + 1);
         
+        unset($expectedAttributes['products']);
         $this->assertDatabaseHas('orders', $expectedAttributes);
         $response->assertStatus(200);
     }
@@ -85,16 +99,34 @@ class OrderCRUDTest extends TestCaseWithSeed
 
         $order = Order::first();
 
+        $products = Product::select('id')
+            ->orderBy('id', 'DESC')
+            ->take('2')
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'quantity' => random_int(1, 50)
+                ]; 
+            })
+            ->toArray();
+
         $response = $this->putJson('api/orders/' . $order->id, [
+            'products' => $products,
             'number' => '147258369'
         ]);
 
         $response->assertStatus(200);
-
+        
         $this->assertDatabaseHas('orders', [
             'id' => $order->id,
             'number' => '147258369'
         ]);
+        
+        $expectedProductsCount = count($products);
+        $existingProducts = $order->products;
+
+        $this->assertCount($expectedProductsCount, $existingProducts);
     }
 
     public function test_a_order_can_be_deleted()

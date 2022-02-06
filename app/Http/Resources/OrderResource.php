@@ -20,7 +20,8 @@ class OrderResource extends JsonResource
             'supplier' => new SupplierResource($this->supplier),
             'order_type' => new OrderTypeResource($this->orderType),
             'number' => $this->number,
-            'date' => $this->date
+            'date' => $this->date,
+            'products' => ProductResource::collection($this->products),
         ];
     }
 }
