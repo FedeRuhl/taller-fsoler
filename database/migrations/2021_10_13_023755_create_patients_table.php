@@ -22,6 +22,7 @@ class CreatePatientsTable extends Migration
                 ->onDelete('cascade');
 
             $table->foreignId('unit_id')
+                ->nullable()
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

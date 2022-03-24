@@ -32,7 +32,7 @@ class StorePatientRequest extends FormRequest
             'os_number' => 'required|string',
             'status' => 'nullable|string',
             'is_military' => 'required|boolean',
-            'unit_id' => 'required|integer|exists:units,id'
+            'unit_id' => 'required_if:is_military,1|integer|exists:units,id'
         ];
     }
 }

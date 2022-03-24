@@ -33,7 +33,7 @@ class UpdatePatientRequest extends FormRequest
             'os_number' => 'string',
             'status' => 'nullable|string',
             'is_military' => 'boolean',
-            'unit_id' => 'integer|exists:units,id'
+            'unit_id' => 'required_if:is_military,1|integer|exists:units,id'
         ];
     }
 
