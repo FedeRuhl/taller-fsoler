@@ -129,8 +129,9 @@ class ProductController extends ApiController
             {
                 $product->update($validated);
 
-                if ($depots = $request->get('depots'))
+                if ($request->has('depots'))
                 {
+                    $depots = $request->get('depots');
                     $syncDepotsData = [];
 
                     foreach($depots as $depot)

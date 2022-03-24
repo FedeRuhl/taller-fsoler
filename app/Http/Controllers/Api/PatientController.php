@@ -9,10 +9,12 @@ use App\Http\Resources\PatientResource;
 use App\Models\Patient;
 use App\Models\Person;
 use Exception;
-use Illuminate\Http\Request;
 
 class PatientController extends ApiController
 {
+    // TODO: agregar lista de teléfono en el store y en el update, y ver si remover el phone controller.
+    // TODO: también analizar si agregar teléfono al crear un user común (personal sanidad)
+
     /**
      * Display a listing of the resource.
      *

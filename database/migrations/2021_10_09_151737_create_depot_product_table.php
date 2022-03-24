@@ -33,6 +33,8 @@ class CreateDepotProductTable extends Migration
             $table->string('lote_code')->nullable();
 
             $table->timestamps();
+
+            $table->index(['depot_id', 'product_id']);
         });
     }
 

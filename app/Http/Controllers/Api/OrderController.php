@@ -122,8 +122,9 @@ class OrderController extends ApiController
             {
                 $order->update($validated);
 
-                if ($products = $request->get('products'))
+                if ($request->has('products'))
                 {
+                    $products = $request->get('products');
                     $syncProductsData = [];
 
                     foreach($products as $product)

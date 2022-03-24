@@ -14,12 +14,20 @@ class GenericResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'id' => $this->id,
             'SIByS_code' => $this->SIByS_code,
             'name' => $this->name,
             'is_disposable' => $this->is_disposable,
             'presentation' => $this->presentation
         ];
+
+        if (isset($this->pivot->generics_total_quantity))
+            $data['total_quantity'] = $this->pivot->generics_total_quantity;
+
+        if (isset($this->pivot->generics_consumed_quantity))
+            $data['consumed_quantity'] = $this->pivot->generics_consumed_quantity;
+
+        return $data;
     }
 }

@@ -6,11 +6,6 @@ use App\Http\Controllers\Controller;
 
 class ApiController extends Controller
 {
-    /**
-     * success response method.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function sendResponse($data, $message)
     {
     	$response = [
@@ -22,11 +17,6 @@ class ApiController extends Controller
         return response()->json($response, 200);
     }
 
-    /**
-     * return OK response.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function sendOK()
     {
     	$response = [
@@ -37,12 +27,6 @@ class ApiController extends Controller
         return response()->json($response, 200);
     }
 
-
-    /**
-     * return error response.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function sendError($error, $errorMessages = [], $code = 404)
     {
     	$response = [
@@ -54,7 +38,18 @@ class ApiController extends Controller
             $response['data'] = $errorMessages;
         }
 
-
         return response()->json($response, $code);
+    }
+
+    public function sendServiceError($error)
+    {
+    	$response = [
+            'success' => false,
+            'message' => $error->description,
+            'code' => $error->code,
+            'type' => $error->type, 
+        ];        
+
+        return response()->json($response, $error->httpCode);
     }
 }

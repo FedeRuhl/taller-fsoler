@@ -25,4 +25,9 @@ class Product extends Model
             ->withPivot(['id', 'stock', 'expiration_date', 'lote_code'])
             ->withTimestamps();
     }
+
+    public function order()
+    {
+        return $this->belongsToMany(Order::class);
+    }
 }
