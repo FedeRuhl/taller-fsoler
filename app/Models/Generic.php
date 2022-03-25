@@ -14,4 +14,8 @@ class Generic extends Model
     public function products() {
         return $this->hasMany(Product::class);
     }
+
+    public function presentations() {
+        return $this->belongsToMany(GenericPresentation::class, 'generic_generic_presentation');
+    }
 }

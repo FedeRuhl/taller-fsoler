@@ -29,7 +29,7 @@ class UpdateGenericRequest extends FormRequest
             'SIByS_code' => 'string',
             'name' => 'string',
             'is_disposable' => 'boolean',
-            'presentation' => 'string'
+            'presentation_ids' => 'array|min:1'
         ];
     }
 

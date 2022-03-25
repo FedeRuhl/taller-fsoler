@@ -24,8 +24,16 @@ class GenericFactory extends Factory
         return [
             'SIByS_code' => $this->faker->unique()->randomNumber(4, true),
             'name' => $this->faker->word(),
-            'is_disposable' => $this->faker->boolean(),
-            'presentation' => $this->faker->text(35)
+            'is_disposable' => $this->faker->boolean()
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Generic $generic) {
+            $generic->presentations()->attach(
+                $this->faker->numberBetween(1, 5)
+            );
+        });
     }
 }

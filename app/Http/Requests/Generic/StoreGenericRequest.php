@@ -27,7 +27,7 @@ class StoreGenericRequest extends FormRequest
             'SIByS_code' => 'required|string|unique:generics',
             'name' => 'required|string',
             'is_disposable' => 'boolean',
-            'presentation' => 'string'
+            'presentation_ids' => 'required|array|min:1'
         ];
     }
 }

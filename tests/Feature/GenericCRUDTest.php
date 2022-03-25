@@ -3,8 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\Generic;
+use App\Models\GenericPresentation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+
+// TODO: generic presentations CRUD
 
 class GenericCRUDTest extends TestCase
 {
@@ -21,7 +24,8 @@ class GenericCRUDTest extends TestCase
         $this->withoutExceptionHandling();
 
         $expectedCount = 10;
-
+        
+        GenericPresentation::factory()->count(5)->create();
         Generic::factory()->count($expectedCount)->create();
 
         $response = $this->getJson('api/generics');
@@ -39,14 +43,18 @@ class GenericCRUDTest extends TestCase
 
         $this->assertDatabaseCount('generics', 0);
 
+        GenericPresentation::factory()->count(5)->create();
+
         $expectedAttributes = [
             'SIByS_code' => '1234',
             'name' => 'Genérico N° 1',
             'is_disposable' => 0,
-            'presentation' => 'Presentación del genérico N° 1.'
+            'presentation_ids' => [1, 2]
         ];
 
         $response = $this->postJson('api/generics', $expectedAttributes);
+
+        unset($expectedAttributes['presentation_ids']);
 
         $response->assertStatus(200);
 
@@ -59,14 +67,19 @@ class GenericCRUDTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        GenericPresentation::factory()->count(5)->create();
+
         $expectedGeneric = Generic::create([
             'SIByS_code' => '1234',
             'name' => 'Genérico N° 1',
-            'is_disposable' => 0,
-            'presentation' => 'Presentación del genérico N° 1.'
+            'is_disposable' => 0
         ]);
 
+        $expectedGeneric->presentations()->sync([1, 2]);
+
         $response = $this->getJson('api/generics/' . $expectedGeneric->id);
+
+        unset($expectedGeneric['presentation_ids']);
 
         $response->assertStatus(200);
 
@@ -79,12 +92,15 @@ class GenericCRUDTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        GenericPresentation::factory()->count(5)->create();
+
         $generic = Generic::create([
             'SIByS_code' => '1234',
             'name' => 'Genérico N° 1',
-            'is_disposable' => 0,
-            'presentation' => 'Presentación del genérico N° 1.'
+            'is_disposable' => 0
         ]);
+
+        $generic->presentations()->sync([1, 2]);
 
         $response = $this->putJson('api/generics/' . $generic->id, [
             'name' => 'Genérico N° 1 actualizado!'
@@ -102,12 +118,15 @@ class GenericCRUDTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        GenericPresentation::factory()->count(5)->create();
+
         $generic = Generic::create([
             'SIByS_code' => '1234',
             'name' => 'Genérico N° 1',
-            'is_disposable' => 0,
-            'presentation' => 'Presentación del genérico N° 1.'
+            'is_disposable' => 0
         ]);
+
+        $generic->presentations()->sync([1, 2]);
 
         $response = $this->deleteJson('api/generics/' . $generic->id);
 

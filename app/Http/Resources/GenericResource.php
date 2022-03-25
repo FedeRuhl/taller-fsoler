@@ -19,7 +19,7 @@ class GenericResource extends JsonResource
             'SIByS_code' => $this->SIByS_code,
             'name' => $this->name,
             'is_disposable' => $this->is_disposable,
-            'presentation' => $this->presentation
+            'presentations' => GenericPresentationResource::collection($this->presentations)
         ];
 
         if (isset($this->pivot->generics_total_quantity))

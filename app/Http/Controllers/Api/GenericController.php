@@ -7,6 +7,7 @@ use App\Http\Requests\Generic\StoreGenericRequest;
 use App\Http\Requests\Generic\UpdateGenericRequest;
 use App\Http\Resources\GenericResource;
 use App\Models\Generic;
+use DB;
 use Exception;
 
 class GenericController extends ApiController
@@ -44,16 +45,27 @@ class GenericController extends ApiController
     {
         try
         {
-            $generic = Generic::create($request->validated());
+            $presentationIds = $request->get('presentation_ids');
+            $genericData = $request->safe()->except('presentation_ids');
+
+            DB::beginTransaction();
+
+            $generic = Generic::create($genericData);
+            $generic->presentations()->sync($presentationIds);
 
             if ($generic)
             {
+                DB::commit();
                 return $this->sendResponse(new GenericResource($generic), 'Generic sucessfully created.');
             }
+
+            DB::rollback();
         }
         
         catch(Exception $e)
         {
+            dd($e);
+            DB::rollback();
             return $this->sendError($e->errorInfo[2]);
         }
     }
@@ -97,12 +109,19 @@ class GenericController extends ApiController
     {
         try
         {
-            $validated = $request->safe()->except(['generic_id']);
+            $validated = $request->safe()->except(['generic_id', 'presentation_ids']);
             $generic = Generic::find($generic_id);
 
             if ($generic)
             {
                 $generic->update($validated);
+
+                if ($request->has('presentation_ids'))
+                {
+                    $presentationIds = $request->get('presentation_ids');
+                    $generic->presentations()->sync($presentationIds);
+                }
+
                 return $this->sendResponse(new GenericResource($generic), 'Generic sucessfully updated.');
             }
             else
