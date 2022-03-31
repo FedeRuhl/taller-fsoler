@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\DepotController;
 use App\Http\Controllers\Api\GenericController;
+use App\Http\Controllers\Api\GenericPresentationController;
 use App\Http\Controllers\Api\HospitalizationController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PatientController;
@@ -275,5 +276,24 @@ Route::prefix('phones')
             ->name('update');
 
         Route::delete('/{phone_id}', [PhoneController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+Route::prefix('generic-presentations')
+    ->name('generic_presentations.')
+    ->group(function () {
+        Route::get('/', [GenericPresentationController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [GenericPresentationController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{generic_presentation_id}', [GenericPresentationController::class, 'show'])
+            ->name('show');
+
+        Route::put('/{generic_presentation_id}', [GenericPresentationController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{generic_presentation_id}', [GenericPresentationController::class, 'destroy'])
             ->name('destroy');
     });

@@ -7,8 +7,6 @@ use App\Models\GenericPresentation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-// TODO: generic presentations CRUD
-
 class GenericCRUDTest extends TestCase
 {
     use RefreshDatabase;
