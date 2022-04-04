@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Generic;
+use App\Models\GenericPresentation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class GenericFactory extends Factory
@@ -30,9 +31,13 @@ class GenericFactory extends Factory
 
     public function configure()
     {
-        return $this->afterCreating(function (Generic $generic) {
+        $presentationIds = GenericPresentation
+            ::pluck('id')
+            ->toArray();
+
+        return $this->afterCreating(function (Generic $generic) use ($presentationIds) {
             $generic->presentations()->attach(
-                $this->faker->numberBetween(1, 5)
+                $this->faker->randomElements($presentationIds, 3, false)
             );
         });
     }
