@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             OrderSeeder::class,
             HospitalizationSeeder::class,
             RequestSeeder::class,
+            WeeklyRequestSeeder::class
         ]);
     }
 }

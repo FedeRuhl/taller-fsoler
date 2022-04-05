@@ -12,8 +12,9 @@ use App\Http\Controllers\Api\RequestController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\UnitController;
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserClassController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WeeklyRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -295,5 +296,24 @@ Route::prefix('generic-presentations')
             ->name('update');
 
         Route::delete('/{generic_presentation_id}', [GenericPresentationController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+Route::prefix('weekly-requests')
+    ->name('weekly_requests.')
+    ->group(function () {
+        Route::get('/', [WeeklyRequestController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [WeeklyRequestController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{request_id}', [WeeklyRequestController::class, 'show'])
+            ->name('show');
+
+        Route::put('/{request_id}', [WeeklyRequestController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{request_id}', [WeeklyRequestController::class, 'destroy'])
             ->name('destroy');
     });
