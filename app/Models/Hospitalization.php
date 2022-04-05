@@ -11,10 +11,7 @@ class Hospitalization extends Model
 
     protected $fillable = [
         'patient_id',
-        'service_id',
-        'is_ambulatory',
-        'start_date',
-        'end_date'
+        'is_ambulatory'
     ];
 
     public function patient()
@@ -22,8 +19,14 @@ class Hospitalization extends Model
         return $this->belongsTo(Patient::class);
     }
 
-    public function service()
+    public function histories()
     {
-        return $this->belongsTo(Service::class);
+        return $this->hasMany(HospitalizationHistory::class);
+    }
+
+    public function currentHistory()
+    {
+        return $this->hasMany(HospitalizationHistory::class)
+            ->whereNull('end_date');
     }
 }

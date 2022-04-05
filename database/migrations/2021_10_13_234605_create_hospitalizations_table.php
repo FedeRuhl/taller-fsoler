@@ -21,16 +21,7 @@ class CreateHospitalizationsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->foreignId('service_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
             $table->boolean('is_ambulatory');
-
-            $table->dateTime('start_date')->nullable();
-
-            $table->dateTime('end_date')->nullable();
 
             $table->timestamps();
         });
@@ -49,12 +40,10 @@ class CreateHospitalizationsTable extends Migration
             if ($dbDriver !== 'sqlite')
             {
                 $table->dropForeign('patient_id');
-                $table->dropForeign('service_id');
             }
         });
 
         Schema::dropColumns('hospitalizations', ['patient_id']);
-        Schema::dropColumns('hospitalizations', ['service_id']);
 
         Schema::dropIfExists('hospitalizations');
     }

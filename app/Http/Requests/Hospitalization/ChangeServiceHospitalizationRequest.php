@@ -5,7 +5,7 @@ namespace App\Http\Requests\Hospitalization;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreHospitalizationRequest extends FormRequest
+class ChangeServiceHospitalizationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,11 +25,7 @@ class StoreHospitalizationRequest extends FormRequest
     public function rules()
     {
         return [
-            'patient_id' => 'required|integer|exists:patients,id',
-            'service_id' => 'required|integer|exists:services,id',
-            'is_ambulatory' => 'required|boolean',
-            'start_date' => 'date',
-            // 'end_date' => 'date',
+            'service_id' => 'required|integer|exists:services,id'
         ];
     }
 }

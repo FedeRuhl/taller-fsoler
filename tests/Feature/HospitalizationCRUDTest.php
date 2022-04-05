@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Hospitalization;
+use App\Models\HospitalizationHistory;
 use App\Models\Patient;
 use App\Models\Service;
 use Carbon\Carbon;
@@ -39,24 +40,29 @@ class HospitalizationCRUDTest extends TestCaseWithSeed
         $this->withoutExceptionHandling();
 
         $hospitalizationsCount = Hospitalization::count();
-        $this->assertDatabaseCount('hospitalizations', $hospitalizationsCount);
+        $hospitalizationHistoriesCount = HospitalizationHistory::count();
 
         $patientId = Patient::value('id');
         $serviceId = Service::value('id');
 
-        $expectedAttributes = [
+        $hospitalizationExpectedAttributes = [
             'patient_id' => $patientId,
+            'is_ambulatory' => 1
+        ];
+
+        $hospitalizationHistoryExpectedAttributes = [
             'service_id' => $serviceId,
-            'is_ambulatory' => 1,
-            'start_date' => '2022/01/31 09:00',
-            // 'end_date' => null,
+            'start_date' => '2022/01/31 09:00'
         ];
         
-        $response = $this->postJson('api/hospitalizations', $expectedAttributes);
+        $response = $this->postJson('api/hospitalizations', array_merge($hospitalizationExpectedAttributes, $hospitalizationHistoryExpectedAttributes));
         
         $this->assertDatabaseCount('hospitalizations', $hospitalizationsCount + 1);
+        $this->assertDatabaseHas('hospitalizations', $hospitalizationExpectedAttributes);
         
-        $this->assertDatabaseHas('hospitalizations', $expectedAttributes);
+        $this->assertDatabaseCount('hospitalization_histories', $hospitalizationHistoriesCount + 1);
+        $this->assertDatabaseHas('hospitalization_histories', $hospitalizationHistoryExpectedAttributes);
+
         $response->assertStatus(200);
     }
 
@@ -83,6 +89,7 @@ class HospitalizationCRUDTest extends TestCaseWithSeed
         $endDate = (Carbon::now())->toDateTimeString();
 
         $response = $this->putJson('api/hospitalizations/' . $hospitalization->id, [
+            'is_ambulatory' => 0,
             'end_date' => $endDate
         ]);
 
@@ -90,6 +97,11 @@ class HospitalizationCRUDTest extends TestCaseWithSeed
 
         $this->assertDatabaseHas('hospitalizations', [
             'id' => $hospitalization->id,
+            'is_ambulatory' => 0
+        ]);
+
+        $this->assertDatabaseHas('hospitalization_histories', [
+            'hospitalization_id' => $hospitalization->id,
             'end_date' => $endDate
         ]);
     }
@@ -105,5 +117,36 @@ class HospitalizationCRUDTest extends TestCaseWithSeed
         $response->assertStatus(200);
 
         $this->assertDeleted($hospitalization);
+    }
+
+    public function test_a_hospitalizacion_can_change_service()
+    {
+        $this->withoutExceptionHandling();
+
+        $hospitalization = Hospitalization::with(['histories', 'currentHistory'])
+            ->first();
+
+        $oldServiceId = $hospitalization->currentHistory->first()->value('service_id');
+        $serviceId = Service::where('id', '!=', $oldServiceId)->value('id');
+
+        $endDate = (Carbon::now())->toDateTimeString();
+
+        $response = $this->postJson('api/hospitalizations/' . $hospitalization->id . '/change-service', [
+            'service_id' => $serviceId
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('hospitalization_histories', [
+            'hospitalization_id' => $hospitalization->id,
+            'service_id' => $oldServiceId,
+            'end_date' => $endDate
+        ]);
+
+        $this->assertDatabaseHas('hospitalization_histories', [
+            'hospitalization_id' => $hospitalization->id,
+            'service_id' => $serviceId,
+            'start_date' => $endDate
+        ]);
     }
 }

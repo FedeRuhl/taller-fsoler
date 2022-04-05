@@ -183,6 +183,9 @@ Route::prefix('hospitalizations')
 
         Route::delete('/{hospitalization_id}', [HospitalizationController::class, 'destroy'])
             ->name('destroy');
+
+        Route::post('/{hospitalization_id}/change-service', [HospitalizationController::class, 'changeService'])
+            ->name('change_service');
     });
 
 Route::prefix('suppliers')

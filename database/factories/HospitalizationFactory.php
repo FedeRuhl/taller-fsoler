@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Hospitalization;
+use App\Models\HospitalizationHistory;
 use App\Models\Patient;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -27,10 +28,17 @@ class HospitalizationFactory extends Factory
 
         return [
             'patient_id' => $this->faker->unique()->randomElement($patientIds),
-            'service_id' => $this->faker->numberBetween(1, 2),
-            'is_ambulatory' => $this->faker->boolean(),
-            'start_date' => $this->faker->dateTimeBetween('-1 years', 'now'),
-            // 'end_date' => $this->faker->dateTimeBetween('now', '+1 years')
+            'is_ambulatory' => $this->faker->boolean()
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Hospitalization $hospitalization) {
+            $hospitalization->histories()->create([
+                'service_id' => $this->faker->numberBetween(1, 2),
+                'start_date' => $this->faker->dateTimeBetween('-1 years', 'now')
+            ]);
+        });
     }
 }
