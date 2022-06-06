@@ -62,7 +62,6 @@ class PatientController extends ApiController
                     'person_id' => $person->id
                 ])->only([
                     'os_number',
-                    'status',
                     'is_military',
                     'unit_id',
                     'person_id'
@@ -134,11 +133,10 @@ class PatientController extends ApiController
                     ]));
                 }
     
-                if ($request->hasAny(['os_number', 'status', 'is_military', 'unit_id']))
+                if ($request->hasAny(['os_number', 'is_military', 'unit_id']))
                 {
                     $patient->update($request->only([
                         'os_number',
-                        'status',
                         'is_military',
                         'unit_id'
                     ]));

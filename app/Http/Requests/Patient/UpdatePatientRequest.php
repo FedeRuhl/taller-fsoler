@@ -31,7 +31,6 @@ class UpdatePatientRequest extends FormRequest
             'last_name' => 'string',
             'birth_date' => 'date',
             'os_number' => 'string',
-            'status' => 'nullable|string',
             'is_military' => 'boolean',
             'unit_id' => 'required_if:is_military,1|integer|exists:units,id'
         ];

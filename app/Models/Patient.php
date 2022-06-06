@@ -13,7 +13,6 @@ class Patient extends Model
         'person_id',
         'unit_id',
         'os_number',
-        'status',
         'is_military'
     ];
 

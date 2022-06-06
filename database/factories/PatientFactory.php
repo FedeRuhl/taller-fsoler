@@ -31,7 +31,6 @@ class PatientFactory extends Factory
             'person_id' => $person->id,
             'unit_id' => $unit->id,
             'os_number' => $this->faker->randomNumber(6, true),
-            // 'status' => '',
             'is_military' => $this->faker->boolean(20)
         ];
     }

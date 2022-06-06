@@ -29,8 +29,6 @@ class CreatePatientsTable extends Migration
 
             $table->string('os_number')->index(); // número de obra social
 
-            $table->string('status')->nullable();
-
             $table->boolean('is_military');
 
             $table->timestamps();

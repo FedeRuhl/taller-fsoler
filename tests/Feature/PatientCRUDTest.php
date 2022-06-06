@@ -58,7 +58,6 @@ class PatientCRUDTest extends TestCaseWithSeed
         $patientExpectedAttributes = [
             'unit_id' => $unitId,
             'os_number' => '123456',
-            // 'status' => '',
             'is_military' => 1
         ];
         

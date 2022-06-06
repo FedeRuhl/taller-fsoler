@@ -19,7 +19,6 @@ class PatientResource extends JsonResource
             'person' => new PersonResource($this->person),
             'unit' => new UnitResource($this->Unit),
             'os_number' => $this->os_number,
-            'status' => $this->status,
             'is_military' => $this->is_military
         ];
     }
