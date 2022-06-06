@@ -21,7 +21,10 @@ class CreateProductsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->string('lab');
+                $table->foreignId('laboratory_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             
             $table->timestamps();
         });
@@ -41,9 +44,11 @@ class CreateProductsTable extends Migration
             if ($dbDriver !== 'sqlite')
             {
                 $table->dropForeign('generic_id');
+                $table->dropForeign('laboratory_id');
             }
             
-            $table->dropColumn('generic_id');
+            Schema::dropColumns('products', ['generic_id']);
+            Schema::dropColumns('products', ['laboratory_id']);
         });
 
         Schema::dropIfExists('products');

@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             DepotSeeder::class,
             GenericPresentationSeeder::class,
             GenericSeeder::class,
+            LaboratorySeeder::class,
             ProductSeeder::class,
             UserClassSeeder::class,
             UserSeeder::class,

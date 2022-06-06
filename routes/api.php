@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\DepotController;
 use App\Http\Controllers\Api\GenericController;
 use App\Http\Controllers\Api\GenericPresentationController;
 use App\Http\Controllers\Api\HospitalizationController;
+use App\Http\Controllers\Api\LaboratoryController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\PhoneController;
@@ -87,6 +88,25 @@ Route::prefix('requests')
             ->name('update');
 
         Route::delete('/{request_id}', [RequestController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+Route::prefix('laboratories')
+    ->name('laboratories.')
+    ->group(function () {
+        Route::get('/', [LaboratoryController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [LaboratoryController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{laboratory_id}', [LaboratoryController::class, 'show'])
+            ->name('show');
+
+        Route::put('/{laboratory_id}', [LaboratoryController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{laboratory_id}', [LaboratoryController::class, 'destroy'])
             ->name('destroy');
     });
 

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use DB;
 use App\Models\Depot;
 use App\Models\Generic;
+use App\Models\Laboratory;
 use App\Models\Product;
 use Tests\TestCaseWithSeed;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -54,11 +55,12 @@ class ProductCRUDTest extends TestCaseWithSeed
             ->toArray();
 
         $genericId = Generic::value('id');
+        $laboratoryId = Laboratory::value('id');
 
         $expectedAttributes = [
             'depots' => $depots,
             'generic_id' => $genericId,
-            'lab' => 'Test lab',
+            'laboratory_id' => $laboratoryId,
         ];
         
         $response = $this->postJson('api/products', $expectedAttributes);
@@ -91,16 +93,17 @@ class ProductCRUDTest extends TestCaseWithSeed
         $this->withoutExceptionHandling();
 
         $product = Product::first();
+        $laboratoryId = Laboratory::value('id');
 
         $response = $this->putJson('api/products/' . $product->id, [
-            'lab' => 'New lab'
+            'laboratory_id' => $laboratoryId
         ]);
 
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('products', [
             'id' => $product->id,
-            'lab' => 'New lab'
+            'laboratory_id' => $laboratoryId
         ]);
     }
 

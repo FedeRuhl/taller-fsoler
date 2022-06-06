@@ -11,12 +11,17 @@ class Product extends Model
 
     protected $fillable = [
         'generic_id',
-        'lab'
+        'laboratory_id'
     ];
 
     public function generic()
     {
         return $this->belongsTo(Generic::class);
+    }
+
+    public function laboratory()
+    {
+        return $this->belongsTo(Laboratory::class);
     }
 
     public function depots()

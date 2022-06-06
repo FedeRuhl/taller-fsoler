@@ -32,7 +32,7 @@ class UpdateProductRequest extends FormRequest
             'depots.*.expiration_date' => 'date',
             'depots.*.lote_code' => 'string',
             'generic_id' => 'integer|exists:generics,id',
-            'lab' => 'string'
+            'laboratory_id' => 'integer|exists:laboratories,id'
         ];
     }
 

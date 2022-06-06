@@ -17,7 +17,7 @@ class ProductResource extends JsonResource
         $data = [
             'id' => $this->id,
             'generic' => new GenericResource($this->generic),
-            'lab' => $this->lab,
+            'laboratory' => new LaboratoryResource($this->laboratory),
             'depots' => DepotResource::collection($this->depots)
         ];
 

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Generic;
+use App\Models\Laboratory;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,9 +23,19 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+        $genericId = Generic::inRandomOrder()->value('id');
+        $laboratoryId = Laboratory::inRandomOrder()->value('id');
+
+        While (Product::where('generic_id', $genericId)
+            ->where('laboratory_id', $laboratoryId)
+            ->exists()) {
+                $genericId = Generic::inRandomOrder()->value('id');
+                $laboratoryId = Laboratory::inRandomOrder()->value('id');
+            }
+
         return [
-            'generic_id' => $this->faker->numberBetween(1, 50),
-            'lab' => $this->faker->company(),
+            'generic_id' => $genericId,
+            'laboratory_id' => $laboratoryId,
         ];
     }
 

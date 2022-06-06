@@ -31,7 +31,7 @@ class StoreProductRequest extends FormRequest
             'depots.*.expiration_date' => 'date',
             'depots.*.lote_code' => 'string',
             'generic_id' => 'required|integer|exists:generics,id',
-            'lab' => 'required|string'
+            'laboratory_id' => 'required|integer|exists:laboratories,id'
         ];
     }
 }
