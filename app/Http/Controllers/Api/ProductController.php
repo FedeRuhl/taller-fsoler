@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Constants;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\OrderType;
 use App\Models\Product;
 use DB;
 use Exception;
@@ -186,6 +188,46 @@ class ProductController extends ApiController
             else
             {
                 return $this->sendError('Product not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
+    }
+
+    /**
+     * Display a listing of the resource by OrderType.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexByOrderType($order_type_id)
+    {
+        try
+        {
+            $orderType = OrderType::find($order_type_id);
+
+            if ($orderType)
+            {
+                switch($orderType->name)
+                {
+                    case Constants::ORDER_TYPES['orden_compra']: 
+                        $products = Product::whereRelation('depots', 'name', Constants::DEPOTS['plan_18'])->get();
+                        break;
+                    case Constants::ORDER_TYPES['remito']: 
+                        $products = Product::whereRelation('depots', 'name', Constants::DEPOTS['fusea'])->get();
+                        break;
+                    default:
+                        $products = collect();
+                        break;
+                }
+
+                return $this->sendResponse(ProductResource::collection($products), 'Products sucessfully listed by Order Type.');
+            }
+            else
+            {
+                return $this->sendError('Order Type not found');
             }
         }
         

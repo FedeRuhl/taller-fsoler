@@ -127,6 +127,9 @@ Route::prefix('products')
 
         Route::delete('/{product_id}', [ProductController::class, 'destroy'])
             ->name('destroy');
+
+        Route::get('/order-type/{order_type_id}', [ProductController::class, 'indexByOrderType'])
+            ->name('index_by_order_type');
     });
 
 Route::prefix('orders')
