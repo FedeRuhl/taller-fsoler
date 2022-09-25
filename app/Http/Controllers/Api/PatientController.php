@@ -7,6 +7,7 @@ use App\Http\Requests\Patient\StorePatientRequest;
 use App\Http\Requests\Patient\UpdatePatientRequest;
 use App\Http\Resources\PatientResource;
 use App\Models\Patient;
+use App\Models\PatientAddress;
 use App\Models\Person;
 use Exception;
 
@@ -57,14 +58,26 @@ class PatientController extends ApiController
                 ])
             );
 
+            $patientAddress = PatientAddress::create(
+                $request->only([
+                    'province_id',
+                    'city_id',
+                    'street',
+                    'number'
+                ])
+            );
+
             $patient = Patient::create(
                 $request->merge([
-                    'person_id' => $person->id
+                    'person_id' => $person->id,
+                    'patient_address_id' => $patientAddress->id
                 ])->only([
                     'os_number',
                     'is_military',
                     'unit_id',
-                    'person_id'
+                    'phone',
+                    'person_id',
+                    'patient_address_id'
                 ])
             );
 
@@ -132,13 +145,24 @@ class PatientController extends ApiController
                         'birth_date'
                     ]));
                 }
+
+                if ($request->hasAny(['province_id', 'city_id', 'street', 'number']))
+                {
+                    $patient->address()->update($request->only([
+                        'province_id',
+                        'city_id',
+                        'street',
+                        'number'
+                    ]));
+                }
     
-                if ($request->hasAny(['os_number', 'is_military', 'unit_id']))
+                if ($request->hasAny(['os_number', 'is_military', 'unit_id', 'phone']))
                 {
                     $patient->update($request->only([
                         'os_number',
                         'is_military',
-                        'unit_id'
+                        'unit_id',
+                        'phone'
                     ]));
                 }
 

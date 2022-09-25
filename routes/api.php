@@ -51,6 +51,9 @@ Route::prefix('depots')
 
         Route::delete('/{depot_id}', [DepotController::class, 'destroy'])
             ->name('destroy');
+
+        Route::post('/{depot_id}/products/{product_id}', [DepotController::class, 'depotProduct'])
+            ->name('depot_product');
     });
 
 Route::prefix('generics')
@@ -89,6 +92,9 @@ Route::prefix('requests')
 
         Route::delete('/{request_id}', [RequestController::class, 'destroy'])
             ->name('destroy');
+
+        Route::post('/{request_id}/consume', [RequestController::class, 'consume'])
+            ->name('consume');
     });
 
 Route::prefix('laboratories')

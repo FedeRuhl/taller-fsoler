@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Depot\ModifyDepotProductRequest;
 use App\Http\Requests\Depot\StoreDepotRequest;
 use App\Http\Requests\Depot\UpdateDepotRequest;
 use App\Http\Resources\DepotResource;
 use App\Models\Depot;
+use App\Models\DepotProduct;
 use Exception;
 
 class DepotController extends ApiController
@@ -137,6 +139,42 @@ class DepotController extends ApiController
             else
             {
                 return $this->sendError('Depot not found');
+            }
+        }
+        
+        catch(Exception $e)
+        {
+            return $this->sendError($e->errorInfo[2]);
+        }
+    }
+
+    /**
+     * Add depot details about a product.
+     *
+     * @param  \App\Models\Depot  $depot
+     * @return \Illuminate\Http\Response
+     */
+    public function depotProduct($depot_id, $product_id, ModifyDepotProductRequest $request)
+    {
+        try
+        {
+            $depotProduct = DepotProduct::updateOrCreate(
+                [
+                    'depot_id' => $request->depot_id,
+                    'product_id' => $request->product_id
+                ],
+                $request->validated()
+            );
+
+            if ($depotProduct)
+            {
+                
+                $data = Depot::find($depotProduct->depot_id);
+                $data->setAttribute('stock', $depotProduct->stock);
+                $data->setAttribute('expiration_date', $depotProduct->expiration_date);
+                $data->setAttribute('lote_code', $depotProduct->lote_code);
+
+                return $this->sendResponse(new DepotResource($data), 'Depot product sucessfully modified.');
             }
         }
         

@@ -2,13 +2,11 @@
 
 namespace Tests\Feature;
 
-use DB;
-use App\Models\Depot;
 use App\Models\Generic;
 use App\Models\Laboratory;
 use App\Models\Product;
-use Tests\TestCaseWithSeed;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCaseWithSeed;
 
 class ProductCRUDTest extends TestCaseWithSeed
 {
@@ -40,25 +38,10 @@ class ProductCRUDTest extends TestCaseWithSeed
         $this->withoutExceptionHandling();
 
         $productsCount = Product::count();
-        $depotProductCount = DB::table('depot_product')->count();
-
-        $depots = Depot::select('id')
-            ->get()
-            ->map(function ($product) {
-                return [
-                    'id' => $product->id,
-                    'stock' => random_int(1, 50),
-                    'expiration_date' => '2023-01-01',
-                    'lote_code' => 'ABC123'
-                ]; 
-            })
-            ->toArray();
-
         $genericId = Generic::value('id');
         $laboratoryId = Laboratory::value('id');
 
         $expectedAttributes = [
-            'depots' => $depots,
             'generic_id' => $genericId,
             'laboratory_id' => $laboratoryId,
         ];
@@ -67,9 +50,6 @@ class ProductCRUDTest extends TestCaseWithSeed
         $response->assertStatus(200);
         
         $this->assertDatabaseCount('products', $productsCount + 1);
-        $this->assertDatabaseCount('depot_product', $depotProductCount + count($depots));
-        
-        unset($expectedAttributes['depots']);
         $this->assertDatabaseHas('products', $expectedAttributes);
     }
 

@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class GenericRequest extends Pivot
 {
+    protected $table = 'generic_requests';
+
     public $incrementing = true;
 
     public function product()
     {
-        return $this->hasOne(Product::class, 'id', 'product_id');
+        return $this->hasOne(GenericRequestProduct::class, 'generic_request_id', 'id');
     }
 }

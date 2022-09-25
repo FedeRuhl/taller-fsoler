@@ -5,13 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UnitUbication extends Model
+class City extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'city_id',
-        'province_id',
-        'zip_code'
+        'name',
+        'province_id'
     ];
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
 }

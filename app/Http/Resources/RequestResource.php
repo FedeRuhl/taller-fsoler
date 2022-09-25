@@ -16,10 +16,11 @@ class RequestResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'owner' => new UserResource($this->Owner),
-            'hospitalization' => new HospitalizationResource($this->Hospitalization),
+            'owner' => new UserResource($this->owner),
+            'hospitalization' => new HospitalizationResource($this->hospitalization),
             'date' => $this->date,
-            'is_authorized' => $this->is_authorized
+            'is_authorized' => $this->is_authorized,
+            'generics' => GenericResource::collection($this->generics)
         ];
     }
 }

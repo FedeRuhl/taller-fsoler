@@ -26,8 +26,8 @@ class UpdateUnitRequest extends FormRequest
     {
         return [
             'unit_id' => 'exists:units,id|unique:units,id,' . $this->unit_id,
-            'city' => 'string',
-            'province' => 'string',
+            'city' => 'exists:cities,id|unique:cities,id,' . $this->city_id,
+            'province' => 'exists:provinces,id|unique:provinces,id,' . $this->province_id,
             'zip_code' => 'string',
             'name' => 'string|unique:units,name,' . $this->unit_id
         ];

@@ -2,14 +2,15 @@
 
 namespace Tests\Feature;
 
+use App\Models\City;
 use App\Models\Unit;
 use App\Models\UnitUbication;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCaseWithSeed;
 
-class UnitCRUDTest extends TestCase
+class UnitCRUDTest extends TestCaseWithSeed
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     /**
      * A basic feature test example.
@@ -21,9 +22,7 @@ class UnitCRUDTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $expectedCount = 10;
-
-        Unit::factory()->count($expectedCount)->create();
+        $expectedCount = Unit::count();
 
         $response = $this->getJson('api/units');
 
@@ -38,29 +37,32 @@ class UnitCRUDTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $this->assertDatabaseCount('units', 0);
+        $expectedUnitCount = Unit::count() + 1;
+        $expectedUbicationCount = UnitUbication::count() + 1;
 
-        $ubicationExpectedAttributes = [
-            'city' => 'Paraná',
-            'province' => 'Entre Ríos',
+        $city = City::inRandomOrder()->first();
+
+        $expectedUbicationAttributes = [
+            'city_id' => $city->id,
+            'province_id' => $city->province_id,
             'zip_code' => '3100'
         ];
 
-        $unitExpectedAttributes = [
+        $expectedUnitAttributes = [
             'name' => 'Unidad de prueba'
         ];
 
-        $parameters = array_merge($ubicationExpectedAttributes, $unitExpectedAttributes);
+        $parameters = array_merge($expectedUbicationAttributes, $expectedUnitAttributes);
 
         $response = $this->postJson('api/units', $parameters);
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseCount('unit_ubications', 1);
-        $this->assertDatabaseHas('unit_ubications', $ubicationExpectedAttributes);
+        $this->assertDatabaseCount('unit_ubications', $expectedUbicationCount);
+        $this->assertDatabaseHas('unit_ubications', $expectedUbicationAttributes);
 
-        $this->assertDatabaseCount('units', 1);
-        $this->assertDatabaseHas('units', $unitExpectedAttributes);
+        $this->assertDatabaseCount('units', $expectedUnitCount);
+        $this->assertDatabaseHas('units', $expectedUnitAttributes);
     }
 
     public function test_a_unit_can_be_showed()
@@ -82,12 +84,13 @@ class UnitCRUDTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $unit = Unit::factory()->create();
+        $unit = Unit::inRandomOrder()->first();
         $ubicationId = $unit->ubication()->value('id');
+        $newCityId = City::inRandomOrder()->value('id');
 
         $response = $this->putJson('api/units/' . $unit->id, [
             'name' => 'Unidad actualizada!',
-            'city' => 'Santa Fé'
+            'city_id' => $newCityId
         ]);
 
         $response->assertStatus(200);
@@ -99,7 +102,7 @@ class UnitCRUDTest extends TestCase
 
         $this->assertDatabaseHas('unit_ubications', [
             'id' => $ubicationId,
-            'city' => 'Santa Fé'
+            'city_id' => $newCityId
         ]);
     }
 

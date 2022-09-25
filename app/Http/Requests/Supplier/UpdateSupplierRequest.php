@@ -29,7 +29,7 @@ class UpdateSupplierRequest extends FormRequest
             'zip_code' => 'string',
             'street' => 'string',
             'number' => 'integer',
-            'CUIT' => 'integer|unique:suppliers',
+            'CUIT' => 'integer|unique:suppliers,CUIT,' . $this->supplier_id,
             'company_name' => 'string'
         ];
     }

@@ -26,6 +26,11 @@ class CreateGenericRequestProductTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
+            $table->foreignId('depot_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
             $table->integer('products_quantity');
 
             $table->timestamps();
@@ -46,11 +51,13 @@ class CreateGenericRequestProductTable extends Migration
             {
                 $table->dropForeign('generic_request_id');
                 $table->dropForeign('product_id');
+                $table->dropForeign('depot_id');
             }
         });
 
         Schema::dropColumns('generic_request_product', ['generic_request_id']);
         Schema::dropColumns('generic_request_product', ['product_id']);
+        Schema::dropColumns('generic_request_product', ['depot_id']);
 
         Schema::dropIfExists('generic_request_product');
     }

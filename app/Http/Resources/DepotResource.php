@@ -19,14 +19,14 @@ class DepotResource extends JsonResource
             'name' => $this->name
         ];
 
-        if (isset($this->pivot->stock))
-            $data['product_stock'] = $this->pivot->stock;
+        if (isset($this->pivot->stock) || isset($this->stock))
+            $data['product_stock'] = $this->pivot->stock ?? $this->stock;
 
-        if (isset($this->pivot->expiration_date))
-            $data['product_expiration_date'] = $this->pivot->expiration_date;
+        if (isset($this->pivot->expiration_date) || isset($this->expiration_date))
+            $data['product_expiration_date'] = $this->pivot->expiration_date ?? $this->expiration_date;
 
-        if (isset($this->pivot->lote_code))
-            $data['product_lote_code'] = $this->pivot->lote_code;
+        if (isset($this->pivot->lote_code) || isset($this->lote_code))
+            $data['product_lote_code'] = $this->pivot->lote_code ?? $this->lote_code;
 
         return $data;
     }

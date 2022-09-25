@@ -47,8 +47,8 @@ class UnitController extends ApiController
         {
             $unitUbication = UnitUbication::create(
                 $request->only([
-                    'city',
-                    'province',
+                    'city_id',
+                    'province_id',
                     'zip_code'
                 ])
             );
@@ -117,11 +117,11 @@ class UnitController extends ApiController
 
             if ($unit)
             {
-                if ($request->hasAny(['city', 'province', 'zip_code']))
+                if ($request->hasAny(['city_id', 'province_id', 'zip_code']))
                 {
                     $unit->ubication()->update($request->only([
-                        'city',
-                        'province',
+                        'city_id',
+                        'province_id',
                         'zip_code'
                     ]));
                 }

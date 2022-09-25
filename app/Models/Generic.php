@@ -18,4 +18,10 @@ class Generic extends Model
     public function presentations() {
         return $this->belongsToMany(GenericPresentation::class, 'generic_generic_presentation');
     }
+
+    public function requests() {
+        return $this->belongsToMany(Request::class, 'generic_requests')
+            ->withPivot(['id', 'generics_total_quantity', 'generics_consumed_quantity'])
+            ->withTimestamps();
+    }
 }

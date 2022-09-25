@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUnitUbicationsTable extends Migration
+class CreateCitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,15 @@ class CreateUnitUbicationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('unit_ubications', function (Blueprint $table) {
+        Schema::create('cities', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
 
             $table->foreignId('province_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->foreignId('city_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-            $table->string('zip_code');
             $table->timestamps();
         });
     }
@@ -38,19 +33,16 @@ class CreateUnitUbicationsTable extends Migration
      */
     public function down()
     {
-        Schema::table('unit_ubications', function (Blueprint $table) {
+        Schema::table('cities', function (Blueprint $table) {
             $dbDriver = DB::getDriverName();
 
             if ($dbDriver !== 'sqlite')
             {
                 $table->dropForeign('province_id');
-                $table->dropForeign('city_id');
             }
         });
 
-        Schema::dropColumns('unit_ubications', ['province_id']);
-        Schema::dropColumns('unit_ubications', ['city_id']);
-
-        Schema::dropIfExists('unit_ubications');
+        Schema::dropColumns('cities', ['province_id']);
+        Schema::dropIfExists('cities');
     }
 }

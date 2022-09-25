@@ -25,8 +25,8 @@ class StoreUnitRequest extends FormRequest
     public function rules()
     {
         return [
-            'city' => 'required|string',
-            'province' => 'required|string',
+            'city_id' => 'required|exists:cities,id|unique:cities,id,' . $this->city_id,
+            'province_id' => 'required|exists:provinces,id|unique:provinces,id,' . $this->province_id,
             'zip_code' => 'required|string',
             'name' => 'required|string|unique:units'
         ];

@@ -3,12 +3,15 @@
 namespace Tests\Feature;
 
 use App\Models\Depot;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\DepotProduct;
+use App\Models\Product;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
+use Tests\TestCaseWithSeed;
 
-class DepotCRUDTest extends TestCase
+class DepotCRUDTest extends TestCaseWithSeed
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     /**
      * A basic feature test example.
@@ -19,10 +22,7 @@ class DepotCRUDTest extends TestCase
     public function test_depots_can_be_indexed()
     {
         $this->withoutExceptionHandling();
-
-        $expectedCount = 10;
-
-        Depot::factory()->count($expectedCount)->create();
+        $expectedCount = Depot::count();
 
         $response = $this->getJson('api/depots');
 
@@ -36,8 +36,7 @@ class DepotCRUDTest extends TestCase
     public function test_a_depot_can_be_created()
     {
         $this->withoutExceptionHandling();
-
-        $this->assertDatabaseCount('depots', 0);
+        $depotCount = Depot::count();
 
         $response = $this->postJson('api/depots', [
             'name' => 'Depósito N° 1'
@@ -45,7 +44,7 @@ class DepotCRUDTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseCount('depots', 1);
+        $this->assertDatabaseCount('depots', $depotCount + 1);
 
         $this->assertDatabaseHas('depots', [
             'name' => 'Depósito N° 1'
@@ -56,9 +55,7 @@ class DepotCRUDTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $expectedDepot = Depot::create([
-            'name' => 'Depósito N° 1'
-        ]);
+        $expectedDepot = Depot::inRandomOrder()->first();
 
         $response = $this->getJson('api/depots/' . $expectedDepot->id);
 
@@ -73,19 +70,17 @@ class DepotCRUDTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $depot = Depot::create([
-            'name' => 'Depósito N° 1'
-        ]);
+        $depot = Depot::inRandomOrder()->first();
 
         $response = $this->putJson('api/depots/' . $depot->id, [
-            'name' => 'Depósito N° 1 actualizado!'
+            'name' => 'Depósito actualizado!'
         ]);
 
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('depots', [
             'id' => $depot->id,
-            'name' => 'Depósito N° 1 actualizado!'
+            'name' => 'Depósito actualizado!'
         ]);
     }
 
@@ -93,14 +88,34 @@ class DepotCRUDTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $depot = Depot::create([
-            'name' => 'Depósito N° 1'
-        ]);
+        $depot = Depot::inRandomOrder()->first();
 
         $response = $this->deleteJson('api/depots/' . $depot->id);
 
         $response->assertStatus(200);
 
         $this->assertDeleted($depot);
+    }
+
+    public function test_a_depot_product_can_be_modified()
+    {
+        $depotProductCount = DepotProduct::count();
+        $depotId = Depot::inRandomOrder()->value('id');
+        $productId = Product::inRandomOrder()->value('id');
+
+        $expectedAttributes = [
+            'stock' => random_int(1, 50),
+            'expiration_date' => '2023-01-01',
+            'lote_code' => 'ABC123'
+        ];
+
+        $response = $this->postJson("api/depots/{$depotId}/products/{$productId}", $expectedAttributes);
+        $response->assertStatus(200);
+
+        $expectedAttributes['depot_id'] = $depotId;
+        $expectedAttributes['product_id'] = $productId;
+
+        $this->assertDatabaseCount('depot_product', $depotProductCount + 1);
+        $this->assertDatabaseHas('depot_product', $expectedAttributes);
     }
 }

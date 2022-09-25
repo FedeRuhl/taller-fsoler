@@ -34,7 +34,7 @@ class CreateUnitsTable extends Migration
      */
     public function down()
     {
-        Schema::table('generic_request_product', function (Blueprint $table) {
+        Schema::table('units', function (Blueprint $table) {
             $dbDriver = DB::getDriverName();
 
             if ($dbDriver !== 'sqlite')

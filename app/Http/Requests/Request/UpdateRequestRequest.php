@@ -30,6 +30,10 @@ class UpdateRequestRequest extends FormRequest
             'hospitalization_id' => 'exists:hospitalizations,id|unique:hospitalizations,id,' . $this->hospitalization_id,
             'date' => 'date',
             'is_authorized' => 'boolean',
+            'generics' => 'array|min:1',
+            'generics.*.id' => 'integer|exists:generics,id',
+            'generics.*.total_quantity' => 'integer',
+            'generics.*.consumed_quantity' => 'prohibited'
         ];
     }
 

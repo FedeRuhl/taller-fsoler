@@ -42,7 +42,7 @@ class RequestFactory extends Factory
 
             $request->generics()->attach($this->faker->randomElement($genericIds), [
                 'generics_total_quantity' => $totalQuantity,
-                'generics_consumed_quantity' => $this->faker->numberBetween(1, 20)
+                'generics_consumed_quantity' => 0
             ]);
 
             $product = Product::where('generic_id', $request->generics->first()->id)->first();
@@ -50,6 +50,7 @@ class RequestFactory extends Factory
             GenericRequestProduct::create([
                 'generic_request_id' => $request->generics->first()->pivot->id,
                 'product_id' => $product->id,
+                'depot_id' => $product->depots()->value('depots.id'),
                 'products_quantity' => $totalQuantity
             ]);
 

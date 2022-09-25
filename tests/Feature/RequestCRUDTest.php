@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Generic;
 use App\Models\Hospitalization;
 use App\Models\Request;
 use App\Models\User;
@@ -45,17 +46,29 @@ class RequestCRUDTest extends TestCaseWithSeed
             ->value('id');
         $hospitalizationId = Hospitalization::value('id');
 
+        $generics = Generic::select('id')
+            ->limit(5)
+            ->get()
+            ->map(function ($generic) {
+                return [
+                    'id' => $generic->id,
+                    'total_quantity' => random_int(5, 10)
+                ];
+            })
+            ->toArray();
+
         $expectedAttributes = [
             'owner_id' => $ownerId,
             'hospitalization_id' => $hospitalizationId,
             'date' => '2022/01/25',
-            'is_authorized' => 0
+            'is_authorized' => 0,
+            'generics' => $generics
         ];
         
         $response = $this->postJson('api/requests', $expectedAttributes);
         
         $this->assertDatabaseCount('requests', $requestsCount + 1);
-        
+        unset($expectedAttributes['generics']);
         $this->assertDatabaseHas('requests', $expectedAttributes);
         $response->assertStatus(200);
     }

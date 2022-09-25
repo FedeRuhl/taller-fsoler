@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\City;
 use App\Models\UnitUbication;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,9 +22,11 @@ class UnitUbicationFactory extends Factory
      */
     public function definition()
     {
+        $city = City::inRandomOrder()->first();
+
         return [
-            'city' => $this->faker->city(),
-            'province' => $this->faker->state(),
+            'city_id' => $city->id,
+            'province_id' => $city->province_id,
             'zip_code' => $this->faker->postcode()
         ];
     }

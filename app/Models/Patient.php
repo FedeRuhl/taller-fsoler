@@ -11,7 +11,9 @@ class Patient extends Model
 
     protected $fillable = [
         'person_id',
+        'patient_address_id',
         'unit_id',
+        'phone',
         'os_number',
         'is_military'
     ];
@@ -24,5 +26,10 @@ class Patient extends Model
     public function unit()
     {
         return $this->belongsTo(Unit::class);
+    }
+
+    public function address()
+    {
+        return $this->belongsTo(PatientAddress::class);
     }
 }

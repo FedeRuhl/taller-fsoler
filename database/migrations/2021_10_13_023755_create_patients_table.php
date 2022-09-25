@@ -21,11 +21,18 @@ class CreatePatientsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
+            $table->foreignId('patient_address_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
             $table->foreignId('unit_id')
                 ->nullable()
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
+            $table->string('phone');
 
             $table->string('os_number')->index(); // número de obra social
 

@@ -45,42 +45,17 @@ class ProductController extends ApiController
     public function store(StoreProductRequest $request)
     {
         try
-        {
-            $depots = $request->get('depots');
-            $syncDepotsData = [];
-
-            foreach($depots as $depot)
-            {
-                $syncDepotsData[$depot['id']]['stock'] = $depot['stock'];
-
-                if (array_key_exists('expiration_date', $depot))
-                {
-                    $syncDepotsData[$depot['id']]['expiration_date'] = $depot['expiration_date'];
-                }
-
-                if (array_key_exists('lote_code', $depot))
-                {
-                    $syncDepotsData[$depot['id']]['lote_code'] = $depot['lote_code'];
-                }
-            }
-
-            DB::beginTransaction();
-            
-            $product = Product::create($request->except('depots'));
-            $product->depots()->sync($syncDepotsData);
+        {            
+            $product = Product::create($request->validated());
 
             if ($product)
             {
-                DB::commit();
                 return $this->sendResponse(new ProductResource($product), 'Product sucessfully created.');
             }
-
-            DB::rollback();
         }
         
         catch(Exception $e)
         {
-            DB::rollback();
             return $this->sendError($e->errorInfo[2]);
         }
     }
@@ -124,36 +99,12 @@ class ProductController extends ApiController
     {
         try
         {
-            $validated = $request->safe()->except(['product_id', 'depots']);
+            $validated = $request->safe()->except(['product_id']);
             $product = Product::find($product_id);
 
             if ($product)
             {
                 $product->update($validated);
-
-                if ($request->has('depots'))
-                {
-                    $depots = $request->get('depots');
-                    $syncDepotsData = [];
-
-                    foreach($depots as $depot)
-                    {
-                        $syncDepotsData[$depot['id']]['stock'] = $depot['stock'];
-
-                        if (array_key_exists('expiration_date', $depot))
-                        {
-                            $syncDepotsData[$depot['id']]['expiration_date'] = $depot['expiration_date'];
-                        }
-
-                        if (array_key_exists('lote_code', $depot))
-                        {
-                            $syncDepotsData[$depot['id']]['lote_code'] = $depot['lote_code'];
-                        }
-                    }
-
-                    $product->depots()->sync($syncDepotsData);
-                }
-
                 return $this->sendResponse(new ProductResource($product), 'Product sucessfully updated.');
             }
             else

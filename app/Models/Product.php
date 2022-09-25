@@ -35,4 +35,10 @@ class Product extends Model
     {
         return $this->belongsToMany(Order::class);
     }
+
+    public function genericRequests()
+    {
+        return $this->belongsToMany(GenericRequestProduct::class, 'generic_request_product', 'product_id', 'generic_request_id')
+            ->withTimestamps();
+    }
 }

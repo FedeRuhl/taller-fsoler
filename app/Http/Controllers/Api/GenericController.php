@@ -21,7 +21,7 @@ class GenericController extends ApiController
     {
         try
         {
-            $generics = Generic::all();
+            $generics = Generic::with('requests')->get();
 
             if ($generics)
             {
@@ -64,7 +64,6 @@ class GenericController extends ApiController
         
         catch(Exception $e)
         {
-            dd($e);
             DB::rollback();
             return $this->sendError($e->errorInfo[2]);
         }

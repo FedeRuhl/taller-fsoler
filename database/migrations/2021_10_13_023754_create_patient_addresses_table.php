@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGenericRequestsTable extends Migration
+class CreatePatientAddressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,25 +13,21 @@ class CreateGenericRequestsTable extends Migration
      */
     public function up()
     {
-        // Listados
-        Schema::create('generic_requests', function (Blueprint $table) {
+        Schema::create('patient_addresses', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('request_id')
+            $table->foreignId('province_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->foreignId('generic_id')
+            $table->foreignId('city_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('generics_total_quantity');
-
-            $table->integer('generics_consumed_quantity')
-                ->default(0);
-
+            $table->string('street');
+            $table->integer('number');
             $table->timestamps();
         });
     }
@@ -43,19 +39,19 @@ class CreateGenericRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::table('generic_requests', function (Blueprint $table) {
+        Schema::table('patient_addresses', function (Blueprint $table) {
             $dbDriver = DB::getDriverName();
 
             if ($dbDriver !== 'sqlite')
             {
-                $table->dropForeign('request_id');
-                $table->dropForeign('generic_id');
+                $table->dropForeign('province_id');
+                $table->dropForeign('city_id');
             }
         });
 
-        Schema::dropColumns('generic_requests', ['request_id']);
-        Schema::dropColumns('generic_requests', ['generic_id']);
+        Schema::dropColumns('patient_addresses', ['province_id']);
+        Schema::dropColumns('patient_addresses', ['city_id']);
 
-        Schema::dropIfExists('generic_requests');
+        Schema::dropIfExists('patient_addresses');
     }
 }

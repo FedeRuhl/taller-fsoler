@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\City;
 use App\Models\Hospitalization;
 use App\Models\Patient;
+use App\Models\PatientAddress;
 use App\Models\Person;
 use App\Models\Unit;
 use App\Models\User;
@@ -41,12 +43,11 @@ class PatientCRUDTest extends TestCaseWithSeed
         $this->withoutExceptionHandling();
         
         $peopleCount = Person::count();
-        $this->assertDatabaseCount('people', $peopleCount);
-
+        $patientAddressesCount = PatientAddress::count();
         $patientsCount = Patient::count();
-        $this->assertDatabaseCount('patients', $patientsCount);
         
         $unitId = Unit::value('id');
+        $city = City::inRandomOrder()->first();
         
         $personExpectedAttributes = [
             'dni' => 45369865,
@@ -55,20 +56,30 @@ class PatientCRUDTest extends TestCaseWithSeed
             'birth_date' => '2005-01-01'
         ];
         
+        $patientAddressExpectedAttributes = [
+            'province_id' => $city->province_id,
+            'city_id' => $city->id,
+            'street' => 'Test',
+            'number' => 1234
+        ];
+
         $patientExpectedAttributes = [
+            'phone' => '0123456789',
             'unit_id' => $unitId,
             'os_number' => '123456',
             'is_military' => 1
         ];
         
-        $parameters = array_merge($personExpectedAttributes, $patientExpectedAttributes);
-        
+        $parameters = array_merge($personExpectedAttributes, $patientExpectedAttributes, $patientAddressExpectedAttributes);
         $response = $this->postJson('api/patients', $parameters);
         
         $response->assertStatus(200);
 
         $this->assertDatabaseCount('people', $peopleCount + 1);
         $this->assertDatabaseHas('people', $personExpectedAttributes);
+
+        $this->assertDatabaseCount('patient_addresses', $patientAddressesCount + 1);
+        $this->assertDatabaseHas('patient_addresses', $patientAddressExpectedAttributes);
 
         $this->assertDatabaseCount('patients', $patientsCount + 1);
         $this->assertDatabaseHas('patients', $patientExpectedAttributes);

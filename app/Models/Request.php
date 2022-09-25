@@ -9,7 +9,12 @@ class Request extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'owner_id',
+        'hospitalization_id',
+        'date',
+        'is_authorized'
+    ];
 
     public function owner()
     {
@@ -26,5 +31,12 @@ class Request extends Model
         return $this->belongsToMany(Generic::class, 'generic_requests')
             ->withPivot(['id', 'generics_total_quantity', 'generics_consumed_quantity'])
             ->withTimestamps();
+    }
+
+    public function patient()
+    {
+        return ($this->hospitalization) 
+            ? $this->hospitalization->patient() 
+            : null;
     }
 }
